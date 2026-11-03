@@ -1,0 +1,136 @@
+/* ============================================
+   VARIABLES GLOBALES
+   ============================================ */
+:root {
+    /* Paleta */
+    --panel: #161d25;
+    --border: #2a333d;
+    --gold: #c9a961;
+    --gold-dim: #8a7439;
+    --gold-bright: #f0c94a;
+    --text: #d8dde3;
+    --muted: #7a8590;
+    --blue: #1e5bc6;
+    --blue-dark: #12408f;
+    --red: #dc3545;
+    --green: #28a745;
+    --bg-dark: #0a1a3c;
+
+    /* Tipografía */
+    --font-body: 'Segoe UI', Arial, sans-serif;
+    --font-title: Georgia, serif;
+    --font-mono: 'Courier New', monospace;
+
+    /* Radios */
+    --radius-sm: 3px;
+    --radius: 9px;
+    --radius-lg: 18px;
+
+    /* Sombras */
+    --shadow-card: 0 10px 40px rgba(0,0,0,0.65), 0 0 60px rgba(30,77,156,0.45);
+    --shadow-gold: 0 6px 22px rgba(212,175,55,0.35);
+}
+
+/* ============================================
+   RESET
+   ============================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ============================================
+   HTML / BODY
+   ============================================ */
+html {
+    scrollbar-width: thin;
+    scrollbar-color: #d4af37 rgba(8, 20, 50, 0.8);
+    scroll-behavior: smooth;
+}
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: rgba(8, 20, 50, 0.8); }
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #d4af37, #b8860b);
+    border-radius: 5px;
+    border: 2px solid rgba(8, 20, 50, 0.8);
+}
+
+body {
+    font-family: var(--font-body);
+    min-height: 100vh;
+    padding: 0;
+    background-color: var(--bg-dark);
+    background-image: url('../img/fondo.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    position: relative;
+    overflow-x: hidden;
+    color: #e6e8ee;
+    line-height: 1.55;
+    font-size: 14px;
+}
+body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+        radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.5) 100%),
+        linear-gradient(160deg, rgba(10,26,60,0.82) 0%, rgba(16,42,107,0.75) 45%, rgba(30,77,156,0.70) 100%);
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* ============================================
+   TIPOGRAFÍA BASE
+   ============================================ */
+h1, h2, h3, h4 {
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--gold-bright);
+}
+p { margin-bottom: 10px; }
+a { color: var(--gold); text-decoration: none; }
+a:hover { color: var(--gold-bright); }
+code {
+    display: inline-block;
+    background: rgba(0,0,0,0.4);
+    padding: 2px 8px;
+    border-radius: 4px;
+    color: #ffd6da;
+    font-size: 12px;
+    font-family: var(--font-mono);
+    word-break: break-all;
+}
+
+/* ============================================
+   ANIMACIONES
+   ============================================ */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================
+   ACCESIBILIDAD
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* ============================================
+   UTILIDADES
+   ============================================ */
+.text-center { text-align: center; }
+.text-muted  { color: var(--muted); }
+.text-gold   { color: var(--gold-bright); }
+.mt-1 { margin-top: 10px; }
+.mt-2 { margin-top: 20px; }
+.mb-1 { margin-bottom: 10px; }
+.mb-2 { margin-bottom: 20px; }
