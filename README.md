@@ -170,7 +170,7 @@ Este proyecto está bajo la licencia **MIT**. Puedes usarlo, modificarlo y distr
 
 **Yaniel**  
 Proyecto: **Yaniel CMS**  
-Repositorio: [https://github.com/tu-usuario/yaniel-cms](https://github.com/tu-usuario/yaniel-cms)
+Repositorio: [https://github.com/Yaniel-Dj/yaniel-cms](https://github.com/Yaniel-Dj/Yaniel-cms)
 
 ---
 
