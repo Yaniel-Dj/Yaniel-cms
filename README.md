@@ -36,7 +36,7 @@ Panel web de gestión para servidores privados de **World of Warcraft (AzerothCo
 1. **Clona el repositorio** en la carpeta de tu servidor web (ej: `C:\laragon\www`):
 
    ```bash
-   git clone https://github.com/tu-usuario/yaniel-cms.git
+   git clone /https://github.com/Yaniel-Dj/Yaniel-cms/tree/main
    ```
 
 2. **Configura `config.php`** con tus credenciales de base de datos y SOAP:
