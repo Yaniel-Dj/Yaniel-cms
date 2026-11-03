@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "titulo": "1. Respeto entre jugadores",
+    "contenido": "Trata a todos los jugadores con respeto. No se permite el insulto, la discriminación, el acoso ni el spam en el chat público. Las discusiones personales deben resolverse en privado o con un GM."
+  },
+  {
+    "id": 2,
+    "titulo": "2. Prohibido el uso de hacks o cheats",
+    "contenido": "Cualquier uso de programas externos que alteren el juego (bots, speedhacks, flyhacks, etc.) supondrá el baneo permanente de la cuenta sin previo aviso."
+  },
+  {
+    "id": 3,
+    "titulo": "3. Prohibido el bug abuse",
+    "contenido": "Si encuentras un bug, repórtalo al staff. Aprovecharte de un bug para obtener ventaja (items, oro, experiencia, etc.) está prohibido y puede conllevar la retirada de lo obtenido y sanción."
+  },
+  {
+    "id": 4,
+    "titulo": "4. Prohibido el RMT (Real Money Trading)",
+    "contenido": "No se permite vender, comprar o intercambiar cuentas, personajes, items u oro por dinero real. Esta infracción supone el baneo permanente."
+  },
+  {
+    "id": 5,
+    "titulo": "5. Comportamiento en raids y grupos",
+    "contenido": "Respeta las normas de tu grupo o raid. No se permite el ninja looting (quedarse items que no te corresponden) ni abandonar de forma deliberada una raid en curso sin causa justificada."
+  },
+  {
+    "id": 6,
+    "titulo": "6. Nombres de personaje y guild",
+    "contenido": "Los nombres de personajes y guildas deben ser apropiados. Se prohíben nombres ofensivos, racistas, sexuales o que suplanten identidad de staff o jugadores."
+  },
+  {
+    "id": 7,
+    "titulo": "7. Cuentas compartidas",
+    "contenido": "Cada jugador es responsable de su cuenta. Compartir la contraseña con otra persona es bajo tu responsabilidad. El staff no se hace responsable de robos de cuenta por este motivo."
+  },
+  {
+    "id": 8,
+    "titulo": "8. Decisiones del staff",
+    "contenido": "Las decisiones de los GMs son finales. Si no estás de acuerdo con una sanción, puedes abrir un ticket o contactar con un administrador, pero nunca discutir públicamente en el chat ni faltar al respeto."
+  }
+]

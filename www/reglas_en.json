@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "titulo": "1. Respect between players",
+    "contenido": "Treat all players with respect. Insults, discrimination, harassment and spam in public chat are not allowed. Personal disputes must be resolved in private or with a GM."
+  },
+  {
+    "id": 2,
+    "titulo": "2. Hacks or cheats are forbidden",
+    "contenido": "Any use of external programs that alter the game (bots, speedhacks, flyhacks, etc.) will result in a permanent account ban without prior notice."
+  },
+  {
+    "id": 3,
+    "titulo": "3. Bug abuse is forbidden",
+    "contenido": "If you find a bug, report it to the staff. Exploiting a bug for advantage (items, gold, experience, etc.) is forbidden and may result in removal of what was obtained and a sanction."
+  },
+  {
+    "id": 4,
+    "titulo": "4. RMT (Real Money Trading) is forbidden",
+    "contenido": "Selling, buying or trading accounts, characters, items or gold for real money is not allowed. This infraction results in a permanent ban."
+  },
+  {
+    "id": 5,
+    "titulo": "5. Behavior in raids and groups",
+    "contenido": "Respect the rules of your group or raid. Ninja looting (keeping items that are not yours) or deliberately leaving an ongoing raid without a justified reason is not allowed."
+  },
+  {
+    "id": 6,
+    "titulo": "6. Character and guild names",
+    "contenido": "Character and guild names must be appropriate. Offensive, racist, sexual or impersonating staff or player names are forbidden."
+  },
+  {
+    "id": 7,
+    "titulo": "7. Shared accounts",
+    "contenido": "Each player is responsible for their account. Sharing your password with another person is at your own risk. The staff is not responsible for account theft for this reason."
+  },
+  {
+    "id": 8,
+    "titulo": "8. Staff decisions",
+    "contenido": "GM decisions are final. If you disagree with a sanction, you can open a ticket or contact an administrator, but never argue publicly in chat or be disrespectful."
+  }
+]

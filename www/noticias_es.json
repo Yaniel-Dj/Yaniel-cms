@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "titulo": "¡Bienvenidos a AzerothCore Server!",
+    "fecha": "2026-10-30",
+    "autor": "Admin",
+    "contenido": "El servidor ya está online. Disfruta de la experiencia WotLK 3.3.5a con rates x1, scripts personalizados y una comunidad activa. ¡Nos vemos en Azeroth!"
+  },
+  {
+    "id": 2,
+    "titulo": "Evento de fin de semana: doble experiencia",
+    "fecha": "2026-10-28",
+    "autor": "Staff",
+    "contenido": "Este fin de semana habrá doble experiencia en todas las zonas. Aprovecha para subir a tu personaje hasta nivel 80 y conseguir equipo épico."
+  },
+  {
+    "id": 3,
+    "titulo": "Nuevas recompensas en la tienda",
+    "fecha": "2026-10-25",
+    "autor": "Admin",
+    "contenido": "Hemos añadido nuevas monturas y mascotas a la tienda. Entra y echa un vistazo a las novedades. ¡Hay items para todos los gustos!"
+  },
+  {
+    "id": 4,
+    "titulo": "Mantenimiento programado",
+    "fecha": "2026-10-22",
+    "autor": "Staff",
+    "contenido": "El próximo martes a las 03:00 se realizará un mantenimiento para actualizar el servidor. La duración estimada es de 2 horas. Disculpen las molestias."
+  }
+]
