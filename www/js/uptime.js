@@ -1,9 +1,19 @@
+/**
+ * Actualiza el contador de uptime cada segundo.
+ * El elemento debe tener id="uptime-display" y atributo data-segundos.
+ */
 (function() {
     var el = document.getElementById('uptime-display');
     if (!el) return;
+
     var segundos = parseInt(el.getAttribute('data-segundos'), 10);
     if (isNaN(segundos) || segundos < 0) return;
 
+    /**
+     * Formatea los segundos en un string legible (d, h, m, s).
+     * @param {number} s - Segundos totales
+     * @returns {string} Tiempo formateado
+     */
     function formatear(s) {
         var d = Math.floor(s / 86400);
         var h = Math.floor((s % 86400) / 3600);
