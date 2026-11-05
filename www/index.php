@@ -20,7 +20,7 @@ if (isset($_GET['logout'])) {
 }
 
 // ============================================
-// VERIFICAR SRP6 (para login)
+// VERIFICAR SRP6
 // ============================================
 function verifySRP6Password($username, $password, $salt_binario, $verifier_esperado) {
     $g = gmp_init(7);
@@ -323,12 +323,15 @@ if ($logueado) {
     </div>
 <?php endif; ?>
 
+<!-- ============================================
+     SIDEBAR VERTICAL
+     ============================================ -->
 <div class="topbar">
-    <nav class="nav">
+    <nav class="nav nav-vertical">
         <div class="brand-group">
             <a href="index.php" class="brand"><?= htmlspecialchars(SERVER_NAME) ?></a>
         </div>
-        <div class="menu">
+        <div class="menu menu-vertical">
             <?php if ($logueado): ?>
                 <?php if ($es_admin): ?>
                     <a href="admin/index.php" class="btn-nav btn-gm-priority"><span class="ico">👑</span> <?= t('gm_panel') ?></a>
@@ -338,8 +341,12 @@ if ($logueado) {
                 <a href="noticias.php" class="btn-nav"><span class="ico">📰</span> <?= t('news_titulo') ?></a>
                 <a href="guias.php" class="btn-nav"><span class="ico">📖</span> <?= t('guias_titulo') ?></a>
                 <a href="reglas.php" class="btn-nav"><span class="ico">📜</span> <?= t('rules') ?></a>
+                <a href="sanciones.php" class="btn-nav"><span class="ico">🚫</span> <?= t('sanctions_title') ?></a>
+                <a href="ranking.php" class="btn-nav"><span class="ico">🏆</span> Ranking</a>
             <?php else: ?>
                 <a href="reglas.php" class="btn-nav"><span class="ico">📜</span> <?= t('rules') ?></a>
+                <a href="sanciones.php" class="btn-nav"><span class="ico">🚫</span> <?= t('sanctions_title') ?></a>
+                <a href="ranking.php" class="btn-nav"><span class="ico">🏆</span> Ranking</a>
                 <a href="#" class="btn-nav outline" onclick="cambiarTab('login'); return false;">→ <?= t('login_tab') ?></a>
                 <a href="#" class="btn-nav primary" onclick="cambiarTab('registro'); return false;">+ <?= t('register_tab') ?></a>
             <?php endif; ?>
@@ -347,6 +354,9 @@ if ($logueado) {
     </nav>
 </div>
 
+<!-- ============================================
+     CONTENIDO
+     ============================================ -->
 <div class="contenedor">
     <div class="caja <?= $logueado ? 'caja-logueado' : '' ?>">
 
@@ -416,7 +426,6 @@ if ($logueado) {
                 <div class="alerta <?= $tipo ?>"><?= htmlspecialchars($mensaje) ?></div>
             <?php endif; ?>
 
-            <!-- FORMULARIO DE LOGIN (visible por defecto) -->
             <div id="tab-login" class="tab-content activo">
                 <form method="POST">
                     <label for="login_user"><?= t('username') ?></label>
@@ -427,7 +436,6 @@ if ($logueado) {
                 </form>
             </div>
 
-            <!-- FORMULARIO DE REGISTRO (oculto por defecto) -->
             <div id="tab-registro" class="tab-content">
                 <form method="POST">
                     <label for="usuario"><?= t('username') ?></label>

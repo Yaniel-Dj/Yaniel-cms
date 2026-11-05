@@ -10,6 +10,8 @@ if (empty($_SESSION['web_logueado'])) {
 $web_user = $_SESSION['web_username'] ?? '';
 $web_id   = $_SESSION['web_user_id'] ?? 0;
 
+$uploads_url = 'uploads/tienda/';
+
 $mensaje = '';
 $tipo = '';
 
@@ -53,14 +55,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comprar_item'])) {
                 $mensaje = t('item_not_found'); $tipo = 'error';
             } else {
                 $pdo_char = new PDO("mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . CHAR_DB_NAME . ";charset=utf8", DB_USER, DB_PASS, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
-                
+
                 $stmt_char = $pdo_char->prepare("SELECT name, money, online FROM characters WHERE guid = ? AND account = ?");
                 $stmt_char->execute([$char_guid, $web_id]);
                 $personaje = $stmt_char->fetch(PDO::FETCH_ASSOC);
-                
+
                 if (!$personaje) {
                     $mensaje = t('char_not_yours'); $tipo = 'error';
-                } 
+                }
                 elseif ($personaje['online']) {
                     $mensaje = t('char_online_error'); $tipo = 'error';
                 }
@@ -77,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comprar_item'])) {
                     $compra_id = $pdo_shop->lastInsertId();
 
                     list($ok, $detalle) = enviarItemPorSOAP($personaje['name'], $item['item_entry'], 1);
-                    
+
                     if ($ok) {
                         $stmt_estado = $pdo_shop->prepare("UPDATE web_shop_purchases SET estado = 'enviado' WHERE id = ?");
                         $stmt_estado->execute([$compra_id]);
@@ -85,10 +87,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comprar_item'])) {
                     } else {
                         $stmt_devolver = $pdo_char->prepare("UPDATE characters SET money = money + ? WHERE guid = ?");
                         $stmt_devolver->execute([$item['precio'], $char_guid]);
-                        
+
                         $stmt_estado = $pdo_shop->prepare("UPDATE web_shop_purchases SET estado = 'fallido' WHERE id = ?");
                         $stmt_estado->execute([$compra_id]);
-                        
+
                         $mensaje = t('buy_fail_refund') . ' ' . t('buy_fail_soap') . ' ' . $detalle; $tipo = 'error';
                     }
                 }
@@ -109,7 +111,7 @@ $cat_actual = $_GET['cat'] ?? 'todas';
 
 try {
     $pdo_shop = new PDO("mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . SHOP_DB_NAME . ";charset=utf8", DB_USER, DB_PASS, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
-    
+
     $stmt_cat = $pdo_shop->query("SELECT * FROM web_shop_categories");
     $categorias = $stmt_cat->fetchAll(PDO::FETCH_ASSOC);
 
@@ -117,7 +119,7 @@ try {
         $stmt_cat_id = $pdo_shop->prepare("SELECT id FROM web_shop_categories WHERE slug = ?");
         $stmt_cat_id->execute([$cat_actual]);
         $cat_id = $stmt_cat_id->fetchColumn();
-        
+
         if ($cat_id) {
             $stmt = $pdo_shop->prepare("SELECT * FROM web_shop_items WHERE activo = 1 AND categoria_id = ?");
             $stmt->execute([$cat_id]);
@@ -171,34 +173,29 @@ try {
         .btn-logout-fixed { background: rgba(220, 53, 69, 0.2); border: 2px solid #dc3545; color: #ff9aa4; }
         .btn-logout-fixed:hover { background: #dc3545; color: #fff; transform: scale(1.1); box-shadow: 0 0 15px rgba(220,53,69,0.6); }
 
-        .nav-interna {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            justify-content: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(212,175,55,0.2);
-        }
-        .nav-interna a {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 14px;
+        .producto-imagen {
+            width: 100%;
+            height: auto;
+            max-height: 300px;
+            object-fit: contain;
+            background: rgba(0,0,0,0.3);
             border-radius: 8px;
-            background: rgba(240, 201, 74, 0.08);
-            border: 1px solid rgba(240, 201, 74, 0.25);
-            color: #c9d8f0;
-            font-size: 13px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.2s ease;
+            margin-bottom: 12px;
+            border: 1px solid rgba(212,175,55,0.3);
+            display: block;
         }
-        .nav-interna a:hover {
-            background: rgba(240, 201, 74, 0.18);
-            border-color: #f0c94a;
-            color: #f0c94a;
-            transform: translateY(-1px);
+        .producto-imagen-placeholder {
+            width: 100%;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(212,175,55,0.2);
+            color: #7a8590;
+            font-size: 48px;
         }
     </style>
 </head>
@@ -216,16 +213,28 @@ try {
     <a href="index.php?logout=1" class="btn-logout-fixed" title="<?= t('logout') ?>"><i class="fa-solid fa-right-from-bracket"></i></a>
 </div>
 
-<div class="contenedor" style="padding-top: 80px;">
-    <div class="caja caja-logueado">
+<div class="topbar">
+    <nav class="nav nav-vertical">
+        <div class="brand-group">
+            <a href="index.php" class="brand"><?= htmlspecialchars(SERVER_NAME) ?></a>
+        </div>
+        <div class="menu menu-vertical">
+            <?php if (!empty($_SESSION['es_admin'])): ?>
+                <a href="admin/index.php" class="btn-nav btn-gm-priority"><span class="ico">👑</span> <?= t('gm_panel') ?></a>
+            <?php endif; ?>
+            <a href="cuenta.php" class="btn-nav"><span class="ico">👤</span> <?= t('my_account') ?></a>
+            <a href="tienda.php" class="btn-nav primary"><span class="ico">🛒</span> <?= t('shop') ?></a>
+            <a href="noticias.php" class="btn-nav"><span class="ico">📰</span> <?= t('news_titulo') ?></a>
+            <a href="guias.php" class="btn-nav"><span class="ico">📖</span> <?= t('guias_titulo') ?></a>
+            <a href="reglas.php" class="btn-nav"><span class="ico">📜</span> <?= t('rules') ?></a>
+            <a href="sanciones.php" class="btn-nav"><span class="ico">🚫</span> <?= t('sanctions_title') ?></a>
+            <a href="ranking.php" class="btn-nav"><span class="ico">🏆</span> Ranking</a>
+        </div>
+    </nav>
+</div>
 
-        <nav class="nav-interna">
-            <a href="cuenta.php">👤 <?= t('my_account') ?></a>
-            <a href="noticias.php">📰 <?= t('news_titulo') ?></a>
-            <a href="guias.php">📖 <?= t('guias_titulo') ?></a>
-            <a href="reglas.php">📜 <?= t('rules') ?></a>
-            <a href="rifa.php">🎟️ <?= t('raffle') ?></a>
-        </nav>
+<div class="contenedor">
+    <div class="caja caja-logueado">
 
         <div class="bienvenida">
             <?= t('welcome') ?>, <strong><?= htmlspecialchars($web_user) ?></strong>
@@ -281,8 +290,19 @@ try {
                         if ($idioma === 'en' && !empty($prod['nombre_en'])) {
                             $nombre_prod = $prod['nombre_en'];
                         }
+                        $ruta_img = !empty($prod['imagen']) ? $uploads_url . $prod['imagen'] : '';
+                        $existe_img = $ruta_img && file_exists(__DIR__ . '/' . $ruta_img);
                     ?>
                     <div class="producto-card">
+                        <?php if ($existe_img): ?>
+                            <img src="<?= htmlspecialchars($ruta_img) ?>"
+                                 alt="<?= htmlspecialchars($nombre_prod) ?>"
+                                 class="producto-imagen"
+                                 loading="lazy">
+                        <?php else: ?>
+                            <div class="producto-imagen-placeholder">🛒</div>
+                        <?php endif; ?>
+
                         <div class="producto-nombre"><?= htmlspecialchars($nombre_prod) ?></div>
                         <div class="producto-precio"><?= t('price') ?>: <span><?= number_format($prod['precio'] / COBRE_POR_ORO) ?> <?= t('gold') ?></span></div>
                         <form method="POST" class="producto-form">

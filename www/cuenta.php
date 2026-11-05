@@ -269,10 +269,25 @@ $clases = [1 => 'Guerrero', 2 => 'Paladín', 3 => 'Cazador', 4 => 'Pícaro', 5 =
     <a href="index.php?logout=1" class="btn-logout-fixed" title="<?= t('logout') ?>"><i class="fa-solid fa-right-from-bracket"></i></a>
 </div>
 
+<!-- ============================================
+     SIDEBAR VERTICAL (igual que index.php)
+     ============================================ -->
 <div class="topbar">
-    <nav class="nav">
+    <nav class="nav nav-vertical">
         <div class="brand-group">
             <a href="index.php" class="brand"><?= htmlspecialchars(SERVER_NAME) ?></a>
+        </div>
+        <div class="menu menu-vertical">
+            <?php if (!empty($_SESSION['es_admin'])): ?>
+                <a href="admin/index.php" class="btn-nav btn-gm-priority"><span class="ico">👑</span> <?= t('gm_panel') ?></a>
+            <?php endif; ?>
+            <a href="cuenta.php" class="btn-nav"><span class="ico">👤</span> <?= t('my_account') ?></a>
+            <a href="tienda.php" class="btn-nav"><span class="ico">🛒</span> <?= t('shop') ?></a>
+            <a href="noticias.php" class="btn-nav"><span class="ico">📰</span> <?= t('news_titulo') ?></a>
+            <a href="guias.php" class="btn-nav"><span class="ico">📖</span> <?= t('guias_titulo') ?></a>
+            <a href="reglas.php" class="btn-nav"><span class="ico">📜</span> <?= t('rules') ?></a>
+            <a href="sanciones.php" class="btn-nav"><span class="ico">🚫</span> <?= t('sanctions_title') ?></a>
+			<a href="ranking.php" class="btn-nav"><span class="ico">🏆</span> Ranking</a>
         </div>
     </nav>
 </div>
@@ -455,7 +470,6 @@ $clases = [1 => 'Guerrero', 2 => 'Paladín', 3 => 'Cazador', 4 => 'Pícaro', 5 =
 
 <?php if ($rifa): ?>
 <script>
-    // CORREGIDO: usar el timestamp de PHP (sin ambigüedad de zonas horarias)
     var fechaFin = <?= strtotime($rifa['fecha_fin']) * 1000 ?>;
 
     var timer = setInterval(function() {

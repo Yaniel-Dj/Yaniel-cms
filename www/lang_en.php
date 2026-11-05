@@ -289,4 +289,22 @@ return [
     'raffle_finished_msg'      => 'Raffle finished. Winner:',
     'raffle_item_sent'         => 'item sent by mail',
     'raffle_no_participants_err' => 'There are no participants in this raffle.',
+
+    // --- SANCTIONS ---
+    'sanctions_title'          => 'Sanctions',
+    'sanctions_subtitle'       => 'List of currently active sanctioned accounts. Staff transparency.',
+    'sanctions_empty'          => 'No active sanctions right now. Great job!',
+    'sanction_permanent'       => 'Permanent',
+
+    // --- RANKING ---
+    'ranking_title'            => 'Player Ranking',
+    'ranking_subtitle'         => 'The best of the server',
+    'ranking_tab_nivel'        => 'Level',
+    'ranking_tab_oro'          => 'Gold',
+    'ranking_tab_tiempo'       => 'Playtime',
+    'ranking_tab_pvp'          => 'PvP Kills',
+    'ranking_col_personaje'    => 'Character',
+    'ranking_col_nivel'        => 'Level',
+    'ranking_col_clase'        => 'Class',
+    'ranking_vacio'            => 'No players yet',
 ];

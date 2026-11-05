@@ -255,13 +255,30 @@ function e($s){ return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
     .btn-logout-fixed { background: rgba(220, 53, 69, 0.2); border: 2px solid #dc3545; color: #ff9aa4; }
     .btn-logout-fixed:hover { background: #dc3545; color: #fff; transform: scale(1.1); box-shadow: 0 0 15px rgba(220,53,69,0.6); }
 
-    .guias-layout { display: flex; gap: 20px; max-width: 1200px; margin: 20px auto; padding: 0 20px; }
+    .guias-layout {
+        display: flex;
+        gap: 20px;
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 0 20px;
+        align-items: flex-start;
+    }
+    .guias-content { flex: 1; min-width: 0; }
     .guias-nav-vertical {
-        flex: 0 0 220px; display: flex; flex-direction: column; gap: 6px;
-        position: sticky; top: 80px; align-self: flex-start;
-        max-height: calc(100vh - 100px); overflow-y: auto;
-        padding: 10px; background: rgba(8, 18, 40, 0.85);
-        border: 1px solid rgba(240, 201, 74, 0.3); border-radius: 12px;
+        flex: 0 0 220px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        position: sticky;
+        top: 80px;
+        align-self: flex-start;
+        max-height: calc(100vh - 100px);
+        overflow-y: auto;
+        padding: 10px;
+        background: rgba(8, 18, 40, 0.85);
+        border: 1px solid rgba(240, 201, 74, 0.3);
+        border-radius: 12px;
+        order: 2;
     }
     .guias-nav-vertical a {
         display: flex; align-items: center; gap: 10px; padding: 10px 14px;
@@ -272,11 +289,14 @@ function e($s){ return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
     .guias-nav-vertical a:hover { background: rgba(240, 201, 74, 0.1); border-color: rgba(240, 201, 74, 0.3); color: #f0c94a; }
     .guias-nav-vertical a.active { background: linear-gradient(135deg, rgba(240,201,74,0.25), rgba(212,175,55,0.15)); border-color: #f0c94a; color: #f0c94a; }
     .guias-nav-vertical a i { color: var(--c, #f0c94a); font-size: 14px; width: 18px; text-align: center; }
-    .guias-content { flex: 1; min-width: 0; }
 
     @media (max-width: 900px) {
         .guias-layout { flex-direction: column; }
-        .guias-nav-vertical { flex: 0 0 auto; position: static; flex-direction: row; overflow-x: auto; overflow-y: hidden; max-height: none; white-space: nowrap; }
+        .guias-nav-vertical {
+            flex: 0 0 auto; position: static; flex-direction: row;
+            overflow-x: auto; overflow-y: hidden; max-height: none;
+            white-space: nowrap; order: 0; width: 100%;
+        }
         .guias-nav-vertical a { flex: 0 0 auto; }
     }
 </style>
@@ -295,7 +315,39 @@ function e($s){ return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
         <a href="index.php" class="btn-back-fixed" title="<?= e(t('back')) ?>"><i class="fa-solid fa-arrow-left"></i></a>
         <a href="index.php?logout=1" class="btn-logout-fixed" title="<?= e(t('logout')) ?>"><i class="fa-solid fa-right-from-bracket"></i></a>
     </div>
+<?php else: ?>
+    <div class="user-fixed-box">
+        <a href="?lang=es" class="btn-lang-fixed" title="Español" style="<?= $idioma === 'es' ? 'background:#f0c94a;color:#1a1200;' : '' ?>">ES</a>
+        <a href="?lang=en" class="btn-lang-fixed" title="English" style="<?= $idioma === 'en' ? 'background:#f0c94a;color:#1a1200;' : '' ?>">EN</a>
+        <a href="index.php" class="btn-back-fixed" title="<?= e(t('back')) ?>"><i class="fa-solid fa-arrow-left"></i></a>
+    </div>
 <?php endif; ?>
+
+<div class="topbar">
+    <nav class="nav nav-vertical">
+        <div class="brand-group">
+            <a href="index.php" class="brand"><?= htmlspecialchars(SERVER_NAME) ?></a>
+        </div>
+        <div class="menu menu-vertical">
+            <?php if (!empty($_SESSION['web_logueado'])): ?>
+                <?php if (!empty($_SESSION['es_admin'])): ?>
+                    <a href="admin/index.php" class="btn-nav btn-gm-priority"><span class="ico">👑</span> <?= t('gm_panel') ?></a>
+                <?php endif; ?>
+                <a href="cuenta.php" class="btn-nav"><span class="ico">👤</span> <?= t('my_account') ?></a>
+                <a href="tienda.php" class="btn-nav"><span class="ico">🛒</span> <?= t('shop') ?></a>
+                <a href="noticias.php" class="btn-nav"><span class="ico">📰</span> <?= t('news_titulo') ?></a>
+                <a href="guias.php" class="btn-nav primary"><span class="ico">📖</span> <?= t('guias_titulo') ?></a>
+                <a href="reglas.php" class="btn-nav"><span class="ico">📜</span> <?= t('rules') ?></a>
+                <a href="sanciones.php" class="btn-nav"><span class="ico">🚫</span> <?= t('sanctions_title') ?></a>
+                <a href="ranking.php" class="btn-nav"><span class="ico">🏆</span> Ranking</a>
+            <?php else: ?>
+                <a href="reglas.php" class="btn-nav"><span class="ico">📜</span> <?= t('rules') ?></a>
+                <a href="sanciones.php" class="btn-nav"><span class="ico">🚫</span> <?= t('sanctions_title') ?></a>
+                <a href="ranking.php" class="btn-nav"><span class="ico">🏆</span> Ranking</a>
+            <?php endif; ?>
+        </div>
+    </nav>
+</div>
 
 <header class="header">
   <h1><?= e(t('guias_titulo')) ?></h1>
@@ -304,14 +356,6 @@ function e($s){ return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
 </header>
 
 <div class="guias-layout">
-  <nav class="guias-nav-vertical" id="nav">
-    <?php foreach ($guias as $g): ?>
-      <a href="#p-<?= e($g['slug']) ?>" style="--c:<?= e($g['color']) ?>">
-        <i class="fa-solid <?= e($g['icono']) ?>"></i><?= e(g($g['nombre'], $idioma)) ?>
-      </a>
-    <?php endforeach; ?>
-  </nav>
-
   <main class="guias-content content">
     <?php foreach ($guias as $g): ?>
       <section class="section" id="p-<?= e($g['slug']) ?>" style="--c:<?= e($g['color']) ?>">
@@ -333,6 +377,14 @@ function e($s){ return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
       </section>
     <?php endforeach; ?>
   </main>
+
+  <nav class="guias-nav-vertical" id="nav">
+    <?php foreach ($guias as $g): ?>
+      <a href="#p-<?= e($g['slug']) ?>" style="--c:<?= e($g['color']) ?>">
+        <i class="fa-solid <?= e($g['icono']) ?>"></i><?= e(g($g['nombre'], $idioma)) ?>
+      </a>
+    <?php endforeach; ?>
+  </nav>
 </div>
 
 <script>

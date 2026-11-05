@@ -83,9 +83,42 @@ if (file_exists($reglas_file)) {
         <a href="index.php" class="btn-back-fixed" title="<?= t('back') ?>"><i class="fa-solid fa-arrow-left"></i></a>
         <a href="index.php?logout=1" class="btn-logout-fixed" title="<?= t('logout') ?>"><i class="fa-solid fa-right-from-bracket"></i></a>
     </div>
+<?php else: ?>
+    <div class="user-fixed-box">
+        <a href="?lang=es" class="btn-lang-fixed" title="Español" style="<?= $idioma === 'es' ? 'background:#f0c94a;color:#1a1200;' : '' ?>">ES</a>
+        <a href="?lang=en" class="btn-lang-fixed" title="English" style="<?= $idioma === 'en' ? 'background:#f0c94a;color:#1a1200;' : '' ?>">EN</a>
+        <a href="index.php" class="btn-back-fixed" title="<?= t('back') ?>"><i class="fa-solid fa-arrow-left"></i></a>
+    </div>
 <?php endif; ?>
 
-<div class="contenedor" style="padding-top: 80px;">
+<!-- SIDEBAR VERTICAL -->
+<div class="topbar">
+    <nav class="nav nav-vertical">
+        <div class="brand-group">
+            <a href="index.php" class="brand"><?= htmlspecialchars(SERVER_NAME) ?></a>
+        </div>
+        <div class="menu menu-vertical">
+            <?php if (!empty($_SESSION['web_logueado'])): ?>
+                <?php if (!empty($_SESSION['es_admin'])): ?>
+                    <a href="admin/index.php" class="btn-nav btn-gm-priority"><span class="ico">👑</span> <?= t('gm_panel') ?></a>
+                <?php endif; ?>
+                <a href="cuenta.php" class="btn-nav"><span class="ico">👤</span> <?= t('my_account') ?></a>
+                <a href="tienda.php" class="btn-nav"><span class="ico">🛒</span> <?= t('shop') ?></a>
+                <a href="noticias.php" class="btn-nav"><span class="ico">📰</span> <?= t('news_titulo') ?></a>
+                <a href="guias.php" class="btn-nav"><span class="ico">📖</span> <?= t('guias_titulo') ?></a>
+                <a href="reglas.php" class="btn-nav primary"><span class="ico">📜</span> <?= t('rules') ?></a>
+                <a href="sanciones.php" class="btn-nav"><span class="ico">🚫</span> <?= t('sanctions_title') ?></a>
+                <a href="ranking.php" class="btn-nav"><span class="ico">🏆</span> Ranking</a>
+            <?php else: ?>
+                <a href="reglas.php" class="btn-nav primary"><span class="ico">📜</span> <?= t('rules') ?></a>
+                <a href="sanciones.php" class="btn-nav"><span class="ico">🚫</span> <?= t('sanctions_title') ?></a>
+                <a href="ranking.php" class="btn-nav"><span class="ico">🏆</span> Ranking</a>
+            <?php endif; ?>
+        </div>
+    </nav>
+</div>
+
+<div class="contenedor">
     <div class="caja caja-logueado">
         <h2 style="color:#f0c94a; text-align:center; margin-bottom:10px;">📖 <?= t('rules_title') ?></h2>
         <p style="color:#9db4d8; text-align:center; font-size:13px; margin-bottom:30px;"><?= t('rules_subtitle') ?></p>

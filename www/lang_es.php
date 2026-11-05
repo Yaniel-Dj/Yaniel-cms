@@ -115,7 +115,6 @@ return [
     'tagline'                  => 'Regístrate para jugar en el servidor',
 
     // --- TIENDA ---
-    'shop'                     => 'Tienda',
     'shop_empty'               => 'La tienda está vacía',
     'buy'                      => 'Comprar',
     'buy_invalid'              => 'Datos de compra inválidos',
@@ -290,4 +289,22 @@ return [
     'raffle_finished_msg'      => 'Rifa finalizada. Ganador:',
     'raffle_item_sent'         => 'item enviado por correo',
     'raffle_no_participants_err' => 'No hay participantes en esta rifa.',
+
+    // --- SANCIONES ---
+    'sanctions_title'          => 'Sanciones',
+    'sanctions_subtitle'       => 'Listado de cuentas sancionadas activas. Transparencia del staff.',
+    'sanctions_empty'          => 'No hay sanciones activas ahora mismo. ¡Buen trabajo!',
+    'sanction_permanent'       => 'Permanente',
+
+    // --- RANKING ---
+    'ranking_title'            => 'Ranking de Jugadores',
+    'ranking_subtitle'         => 'Los mejores del servidor',
+    'ranking_tab_nivel'        => 'Nivel',
+    'ranking_tab_oro'          => 'Oro',
+    'ranking_tab_tiempo'       => 'Tiempo jugado',
+    'ranking_tab_pvp'          => 'Kills PvP',
+    'ranking_col_personaje'    => 'Personaje',
+    'ranking_col_nivel'        => 'Nivel',
+    'ranking_col_clase'        => 'Clase',
+    'ranking_vacio'            => 'No hay jugadores todavía',
 ];

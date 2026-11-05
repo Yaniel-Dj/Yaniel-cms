@@ -2,7 +2,6 @@
 require_once __DIR__ . '/lang.php';
 require_once __DIR__ . '/config.php';
 
-// Elegir archivo de noticias según el idioma
 $noticias_file = ($idioma === 'en') ? __DIR__ . '/noticias_en.json' : __DIR__ . '/noticias_es.json';
 
 $noticias = [];
@@ -67,6 +66,7 @@ if (!file_exists($noticias_file)) {
         .btn-back-fixed:hover { background: #f0c94a; color: #1a1200; transform: scale(1.1); box-shadow: 0 0 15px rgba(240,201,74,0.6); }
         .btn-logout-fixed { background: rgba(220, 53, 69, 0.2); border: 2px solid #dc3545; color: #ff9aa4; }
         .btn-logout-fixed:hover { background: #dc3545; color: #fff; transform: scale(1.1); box-shadow: 0 0 15px rgba(220,53,69,0.6); }
+
         .nav-botones {
             display: flex; gap: 12px; justify-content: center;
             margin-bottom: 35px; flex-wrap: wrap;
@@ -91,9 +91,41 @@ if (!file_exists($noticias_file)) {
         <a href="index.php" class="btn-back-fixed" title="<?= t('back') ?>"><i class="fa-solid fa-arrow-left"></i></a>
         <a href="index.php?logout=1" class="btn-logout-fixed" title="<?= t('logout') ?>"><i class="fa-solid fa-right-from-bracket"></i></a>
     </div>
+<?php else: ?>
+    <div class="user-fixed-box">
+        <a href="?lang=es" class="btn-lang-fixed" title="Español" style="<?= $idioma === 'es' ? 'background:#f0c94a;color:#1a1200;' : '' ?>">ES</a>
+        <a href="?lang=en" class="btn-lang-fixed" title="English" style="<?= $idioma === 'en' ? 'background:#f0c94a;color:#1a1200;' : '' ?>">EN</a>
+        <a href="index.php" class="btn-back-fixed" title="<?= t('back') ?>"><i class="fa-solid fa-arrow-left"></i></a>
+    </div>
 <?php endif; ?>
 
-<div class="contenedor" style="padding-top: 80px;">
+<div class="topbar">
+    <nav class="nav nav-vertical">
+        <div class="brand-group">
+            <a href="index.php" class="brand"><?= htmlspecialchars(SERVER_NAME) ?></a>
+        </div>
+        <div class="menu menu-vertical">
+            <?php if (!empty($_SESSION['web_logueado'])): ?>
+                <?php if (!empty($_SESSION['es_admin'])): ?>
+                    <a href="admin/index.php" class="btn-nav btn-gm-priority"><span class="ico">👑</span> <?= t('gm_panel') ?></a>
+                <?php endif; ?>
+                <a href="cuenta.php" class="btn-nav"><span class="ico">👤</span> <?= t('my_account') ?></a>
+                <a href="tienda.php" class="btn-nav"><span class="ico">🛒</span> <?= t('shop') ?></a>
+                <a href="noticias.php" class="btn-nav primary"><span class="ico">📰</span> <?= t('news_titulo') ?></a>
+                <a href="guias.php" class="btn-nav"><span class="ico">📖</span> <?= t('guias_titulo') ?></a>
+                <a href="reglas.php" class="btn-nav"><span class="ico">📜</span> <?= t('rules') ?></a>
+                <a href="sanciones.php" class="btn-nav"><span class="ico">🚫</span> <?= t('sanctions_title') ?></a>
+                <a href="ranking.php" class="btn-nav"><span class="ico">🏆</span> Ranking</a>
+            <?php else: ?>
+                <a href="reglas.php" class="btn-nav"><span class="ico">📜</span> <?= t('rules') ?></a>
+                <a href="sanciones.php" class="btn-nav"><span class="ico">🚫</span> <?= t('sanctions_title') ?></a>
+                <a href="ranking.php" class="btn-nav"><span class="ico">🏆</span> Ranking</a>
+            <?php endif; ?>
+        </div>
+    </nav>
+</div>
+
+<div class="contenedor">
     <div class="caja caja-logueado">
         <div class="cabecera" style="text-align:center; margin-bottom:30px;">
             <div class="logo-name" style="color:#f0c94a; font-size:32px; font-weight:800; text-shadow:0 0 18px rgba(240,201,74,0.55);">
