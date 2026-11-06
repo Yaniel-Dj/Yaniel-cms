@@ -64,38 +64,70 @@ function verifySRP6Password($username, $password, $salt_binario, $verifier_esper
 }
 
 // ============================================
-// LOGIN WEB
+// LOGIN WEB (CON PROTECCIÓN FUERZA BRUTA)
 // ============================================
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login_web'])) {
-    $user = trim($_POST['login_user'] ?? '');
-    $pass = $_POST['login_pass'] ?? '';
-    if (empty($user) || empty($pass)) {
-        $mensaje = t('login_empty'); $tipo = 'error';
-    } else {
-        try {
-            $pdo = new PDO("mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME . ";charset=utf8", DB_USER, DB_PASS, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
-            $stmt = $pdo->prepare("SELECT id, salt, verifier FROM account WHERE username = ?");
-            $stmt->execute([strtoupper($user)]);
-            $cuenta = $stmt->fetch(PDO::FETCH_ASSOC);
-            if ($cuenta && verifySRP6Password($user, $pass, $cuenta['salt'], $cuenta['verifier'])) {
-                $_SESSION['web_user_id']  = $cuenta['id'];
-                $_SESSION['web_username'] = strtoupper($user);
-                $_SESSION['web_logueado'] = true;
-                
-                // NUEVO: Evita robo de sesión cambiando el ID al entrar
-                session_regenerate_id(true);
+    
+    // NUEVO: Verificar si está bloqueado por intentos fallidos
+    if (isset($_SESSION['login_intentos']) && $_SESSION['login_intentos'] >= 5) {
+        $tiempo_bloqueo = 300; // 5 minutos
+        $tiempo_transcurrido = time() - ($_SESSION['login_ultimo_intento'] ?? 0);
+        
+        if ($tiempo_transcurrido < $tiempo_bloqueo) {
+            $minutos_restantes = ceil(($tiempo_bloqueo - $tiempo_transcurrido) / 60);
+            $mensaje = "Demasiados intentos fallidos. Inténtalo de nuevo en $minutos_restantes minuto(s)."; $tipo = 'error';
+        } else {
+            $_SESSION['login_intentos'] = 0; // Reiniciar contador si ya pasó el tiempo
+        }
+    }
+    
+    // Solo intentar loguear si no está bloqueado
+    if (empty($mensaje)) {
+        $user = trim($_POST['login_user'] ?? '');
+        $pass = $_POST['login_pass'] ?? '';
+        if (empty($user) || empty($pass)) {
+            $mensaje = t('login_empty'); $tipo = 'error';
+        } else {
+            try {
+                $pdo = new PDO("mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME . ";charset=utf8", DB_USER, DB_PASS, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+                $stmt = $pdo->prepare("SELECT id, salt, verifier FROM account WHERE username = ?");
+                $stmt->execute([strtoupper($user)]);
+                $cuenta = $stmt->fetch(PDO::FETCH_ASSOC);
+                if ($cuenta && verifySRP6Password($user, $pass, $cuenta['salt'], $cuenta['verifier'])) {
+                    // Login exitoso: reiniciar intentos
+                    unset($_SESSION['login_intentos']);
+                    unset($_SESSION['login_ultimo_intento']);
+                    
+                    $_SESSION['web_user_id']  = $cuenta['id'];
+                    $_SESSION['web_username'] = strtoupper($user);
+                    $_SESSION['web_logueado'] = true;
+                    
+                    session_regenerate_id(true);
 
-                $stmt_gm = $pdo->prepare("SELECT gmlevel FROM account_access WHERE id = ? AND RealmID IN (-1, 1) LIMIT 1");
-                $stmt_gm->execute([$cuenta['id']]);
-                $gm = $stmt_gm->fetch(PDO::FETCH_ASSOC);
-                $_SESSION['es_admin'] = ($gm && (int)$gm['gmlevel'] >= 3);
-                header('Location: index.php');
-                exit;
-            } else {
-                $mensaje = t('login_invalid'); $tipo = 'error';
+                    $stmt_gm = $pdo->prepare("SELECT gmlevel FROM account_access WHERE id = ? AND RealmID IN (-1, 1) LIMIT 1");
+                    $stmt_gm->execute([$cuenta['id']]);
+                    $gm = $stmt_gm->fetch(PDO::FETCH_ASSOC);
+                    $_SESSION['es_admin'] = ($gm && (int)$gm['gmlevel'] >= 3);
+                    header('Location: index.php');
+                    exit;
+                } else {
+                    // NUEVO: Sumar intento fallido
+                    if (!isset($_SESSION['login_intentos'])) {
+                        $_SESSION['login_intentos'] = 0;
+                    }
+                    $_SESSION['login_intentos']++;
+                    $_SESSION['login_ultimo_intento'] = time();
+                    
+                    $intentos_restantes = 5 - $_SESSION['login_intentos'];
+                    if ($intentos_restantes > 0) {
+                        $mensaje = t('login_invalid') . " (Te quedan $intentos_restantes intentos)"; $tipo = 'error';
+                    } else {
+                        $mensaje = "Demasiados intentos fallidos. Cuenta bloqueada por 5 minutos."; $tipo = 'error';
+                    }
+                }
+            } catch (PDOException $e) {
+                $mensaje = t('db_error'); $tipo = 'error';
             }
-        } catch (PDOException $e) {
-            $mensaje = t('db_error'); $tipo = 'error';
         }
     }
 }
