@@ -2,6 +2,23 @@
 require_once __DIR__ . '/lang.php';
 require_once __DIR__ . '/config.php';
 
+// ============================================
+// SEGURIDAD DE SESIÓN
+// ============================================
+ini_set('session.use_strict_mode', '1');
+ini_set('session.use_only_cookies', '1');
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_set_cookie_params([
+        'lifetime' => 0,
+        'path'     => '/',
+        'secure'   => isset($_SERVER['HTTPS']), // Solo seguro si usas HTTPS
+        'httponly' => true,  // Bloquea robo por JavaScript (XSS)
+        'samesite' => 'Lax'  // Bloquea ataques CSRF
+    ]);
+    session_start();
+}
+
 $mensaje = '';
 $tipo = '';
 
@@ -14,6 +31,16 @@ $web_id   = $_SESSION['web_user_id'] ?? 0;
 // LOGOUT
 // ============================================
 if (isset($_GET['logout'])) {
+    $_SESSION = array(); // Limpia todas las variables
+    
+    // Borra la cookie de sesión del navegador
+    if (ini_get("session.use_cookies")) {
+        $params = session_get_cookie_params();
+        setcookie(session_name(), '', time() - 42000,
+            $params["path"], $params["domain"],
+            $params["secure"], $params["httponly"]
+        );
+    }
     session_destroy();
     header('Location: index.php');
     exit;
@@ -54,6 +81,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login_web'])) {
                 $_SESSION['web_user_id']  = $cuenta['id'];
                 $_SESSION['web_username'] = strtoupper($user);
                 $_SESSION['web_logueado'] = true;
+                
+                // NUEVO: Evita robo de sesión cambiando el ID al entrar
+                session_regenerate_id(true);
+
                 $stmt_gm = $pdo->prepare("SELECT gmlevel FROM account_access WHERE id = ? AND RealmID IN (-1, 1) LIMIT 1");
                 $stmt_gm->execute([$cuenta['id']]);
                 $gm = $stmt_gm->fetch(PDO::FETCH_ASSOC);
