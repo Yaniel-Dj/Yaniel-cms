@@ -10,7 +10,7 @@ date_default_timezone_set('America/Havana');
 define('DB_HOST', '127.0.0.1');
 define('DB_PORT', '3306');
 define('DB_USER', 'root');
-define('DB_PASS', 'admin');
+define('DB_PASS', 'pass');
 define('DB_NAME', 'acore_auth');
 define('CHAR_DB_NAME', 'acore_characters');
 define('WORLD_DB_NAME', 'acore_world');
@@ -46,8 +46,8 @@ if (!defined('REGLAS_EN_FILE')) define('REGLAS_EN_FILE', __DIR__ . '/reglas_en.j
 define('SOAP_HOST', '127.0.0.1');
 define('SOAP_PORT', 7878);
 define('SOAP_URI', 'urn:AC');
-define('SOAP_GM_USER', 'YANIEL');
-define('SOAP_GM_PASS', 'yaniel1230');
+define('SOAP_GM_USER', 'user');
+define('SOAP_GM_PASS', 'pass');
 
 // Economía
 define('COBRE_POR_ORO', 10000);
