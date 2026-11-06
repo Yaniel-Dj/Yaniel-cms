@@ -4,6 +4,15 @@
 $mensaje = '';
 $tipo = '';
 
+// ============================================
+// NUEVO: VERIFICAR TOKEN CSRF
+// ============================================
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        die("Acceso denegado: Token de seguridad inválido.");
+    }
+}
+
 // CREAR RIFA
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crear_rifa'])) {
     $item_entry     = (int)($_POST['item_entry'] ?? 0);
@@ -157,6 +166,9 @@ try {
 <div class="admin-section">
     <h3>🎟️ <?= t('create_raffle') ?></h3>
     <form method="POST">
+        <!-- NUEVO: Token CSRF -->
+        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+
         <label for="item_entry"><?= t('raffle_item_id') ?></label>
         <input type="number" id="item_entry" name="item_entry" required min="1">
 
@@ -236,6 +248,8 @@ try {
                             <div style="display:flex; gap:5px; flex-wrap:wrap;">
                                 <?php if ($r['estado'] !== 'finalizada'): ?>
                                     <form method="POST" style="margin:0;" onsubmit="return confirm('<?= $r['estado'] === 'activa' ? '¿Pausar esta rifa?' : '¿Activar esta rifa?' ?>');">
+                                        <!-- NUEVO: Token CSRF -->
+                                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                                         <input type="hidden" name="toggle_id" value="<?= $r['id'] ?>">
                                         <button type="submit" name="toggle_rifa" class="btn-borrar" style="background:rgba(240,201,74,0.2); border-color:#f0c94a; color:#f0c94a;">
                                             <?= $r['estado'] === 'activa' ? '⏸️ Pausar' : '▶️ Activar' ?>
@@ -243,11 +257,15 @@ try {
                                     </form>
 
                                     <form method="POST" style="margin:0;" onsubmit="return confirm('<?= t('raffle_finish_confirm') ?>');">
+                                        <!-- NUEVO: Token CSRF -->
+                                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                                         <input type="hidden" name="rifa_id" value="<?= $r['id'] ?>">
                                         <button type="submit" name="finalizar_rifa" class="btn-borrar" style="background:rgba(220,53,69,0.3); border-color:#dc3545; color:#ff9aa4;"><?= t('raffle_finish') ?></button>
                                     </form>
                                 <?php else: ?>
                                     <form method="POST" style="margin:0;" onsubmit="return confirm('¿Borrar esta rifa finalizada? Esta acción no se puede deshacer.');">
+                                        <!-- NUEVO: Token CSRF -->
+                                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                                         <input type="hidden" name="delete_id" value="<?= $r['id'] ?>">
                                         <button type="submit" name="borrar_rifa" class="btn-borrar" style="background:rgba(220,53,69,0.3); border-color:#dc3545; color:#ff9aa4;">🗑️ Borrar</button>
                                     </form>
