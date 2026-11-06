@@ -2,10 +2,18 @@
 require_once __DIR__ . '/../lang.php';
 require_once __DIR__ . '/../config.php';
 
-// Solo admin
-if (empty($_SESSION['es_admin'])) {
+// ============================================
+// SEGURIDAD DEL PANEL ADMIN
+// ============================================
+// 1. Verificación estricta: debe estar logueado y ser admin (true)
+if (empty($_SESSION['web_logueado']) || $_SESSION['es_admin'] !== true) {
     header('Location: ../index.php');
     exit;
+}
+
+// 2. Generar Token CSRF si no existe (para proteger los formularios)
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
 $web_user = $_SESSION['web_username'] ?? '';
