@@ -7,13 +7,6 @@ if (empty($_SESSION['web_logueado'])) {
     exit;
 }
 
-// ============================================
-// NUEVO: GENERAR TOKEN CSRF SI NO EXISTE
-// ============================================
-if (empty($_SESSION['csrf_token'])) {
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-}
-
 $web_user = $_SESSION['web_username'] ?? '';
 $web_id   = $_SESSION['web_user_id'] ?? 0;
 
@@ -64,7 +57,7 @@ try {
 // COMPRAR BOLETOS DE RIFA
 // ============================================
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comprar_boleto_cuenta'])) {
-    // NUEVO: Verificar Token CSRF
+    // Verificar Token CSRF
     if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
         die("Acceso denegado: Token de seguridad inválido.");
     }
@@ -150,7 +143,7 @@ function calculateSRP6Verifier($username, $password) {
 // PROCESAR CAMBIO DE CONTRASEÑA
 // ============================================
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cambiar_pass'])) {
-    // NUEVO: Verificar Token CSRF
+    // Verificar Token CSRF
     if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
         die("Acceso denegado: Token de seguridad inválido.");
     }
@@ -356,7 +349,7 @@ $clases = [1 => 'Guerrero', 2 => 'Paladín', 3 => 'Cazador', 4 => 'Pícaro', 5 =
                 <div class="vacio"><?= t('no_characters') ?></div>
             <?php else: ?>
                 <form method="POST">
-                    <!-- NUEVO: Token CSRF -->
+                    <!-- Token CSRF (ya creado por el login) -->
                     <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
 
                     <label for="char_guid"><?= t('char_that_pays') ?></label>
@@ -412,7 +405,7 @@ $clases = [1 => 'Guerrero', 2 => 'Paladín', 3 => 'Cazador', 4 => 'Pícaro', 5 =
         <div class="seccion-cuenta <?= $tab_actual === 'canjear' ? 'activa' : '' ?>">
             <p style="color:#9db4d8; font-size:13px; margin-bottom:20px;"><?= t('redeem_code') ?></p>
             <form action="canjear.php" method="POST">
-                <!-- NUEVO: Token CSRF (Se envía a canjear.php) -->
+                <!-- Token CSRF (se envía a canjear.php) -->
                 <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
 
                 <label for="codigo"><?= t('code') ?></label>
@@ -446,7 +439,7 @@ $clases = [1 => 'Guerrero', 2 => 'Paladín', 3 => 'Cazador', 4 => 'Pícaro', 5 =
                         <p style="color:#ff9aa4;"><?= t('no_characters') ?></p>
                     <?php else: ?>
                         <form method="POST" style="max-width: 400px; margin: 0 auto;">
-                            <!-- NUEVO: Token CSRF -->
+                            <!-- Token CSRF -->
                             <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
 
                             <label for="char_guid_rifa"><?= t('select_char') ?></label>
