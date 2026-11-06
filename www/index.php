@@ -68,7 +68,7 @@ function verifySRP6Password($username, $password, $salt_binario, $verifier_esper
 // ============================================
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login_web'])) {
     
-    // NUEVO: Verificar si está bloqueado por intentos fallidos
+    // Verificar si está bloqueado por intentos fallidos
     if (isset($_SESSION['login_intentos']) && $_SESSION['login_intentos'] >= 5) {
         $tiempo_bloqueo = 300; // 5 minutos
         $tiempo_transcurrido = time() - ($_SESSION['login_ultimo_intento'] ?? 0);
@@ -104,6 +104,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login_web'])) {
                     
                     session_regenerate_id(true);
 
+                    // NUEVO: Generar el token justo aquí al loguearse
+                    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+
                     $stmt_gm = $pdo->prepare("SELECT gmlevel FROM account_access WHERE id = ? AND RealmID IN (-1, 1) LIMIT 1");
                     $stmt_gm->execute([$cuenta['id']]);
                     $gm = $stmt_gm->fetch(PDO::FETCH_ASSOC);
@@ -111,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login_web'])) {
                     header('Location: index.php');
                     exit;
                 } else {
-                    // NUEVO: Sumar intento fallido
+                    // Sumar intento fallido
                     if (!isset($_SESSION['login_intentos'])) {
                         $_SESSION['login_intentos'] = 0;
                     }
