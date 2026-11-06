@@ -1,23 +1,34 @@
 # ==========================================
-# SEGURIDAD GENERAL (A PRUEBA DE BALAS)
+# 1. BLOQUEAR CONFIGURACIÓN
 # ==========================================
-
-# 1. Bloquear el archivo config.php
 <Files "config.php">
     Require all denied
 </Files>
 
-# 2. Bloquear el propio archivo .htaccess
+# ==========================================
+# 2. BLOQUEAR EL PROPIO .HTACCESS
+# ==========================================
 <Files ".htaccess">
     Require all denied
 </Files>
 
-# 3. Bloquear cualquier archivo oculto (como .env, .git, .htpasswd)
+# ==========================================
+# 3. BLOQUEAR ARCHIVOS OCULTOS (como .env, .git)
+# ==========================================
 <FilesMatch "^\.">
     Require all denied
 </FilesMatch>
 
-# 4. Bloquear la descarga directa de los archivos JSON
+# ==========================================
+# 4. BLOQUEAR LOS ARCHIVOS JSON (noticias, reglas)
+# ==========================================
 <FilesMatch "\.(json)$">
     Require all denied
 </FilesMatch>
+
+# ==========================================
+# 5. BLOQUEAR EL ARCHIVO DE ERRORES (NUEVO)
+# ==========================================
+<Files "error_log.txt">
+    Require all denied
+</Files>
