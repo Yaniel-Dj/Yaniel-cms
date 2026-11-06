@@ -7,6 +7,13 @@ if (empty($_SESSION['web_logueado'])) {
     exit;
 }
 
+// ============================================
+// NUEVO: GENERAR TOKEN CSRF SI NO EXISTE
+// ============================================
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
 $web_user = $_SESSION['web_username'] ?? '';
 $web_id   = $_SESSION['web_user_id'] ?? 0;
 
@@ -26,6 +33,11 @@ try {
 // CANJEAR CÓDIGO
 // ============================================
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['canjear'])) {
+    // NUEVO: Verificar Token CSRF
+    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        die("Acceso denegado: Token de seguridad inválido.");
+    }
+
     $codigo_input = strtoupper(trim($_POST['codigo'] ?? ''));
     $char_guid = (int)($_POST['char_guid'] ?? 0);
 
@@ -176,6 +188,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['canjear'])) {
             <div class="vacio"><?= t('no_characters') ?></div>
         <?php else: ?>
             <form method="POST">
+                <!-- NUEVO: Token CSRF -->
+                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+
                 <label for="codigo"><?= t('code') ?></label>
                 <input type="text" id="codigo" name="codigo" placeholder="<?= t('code_ph') ?>" required style="text-transform: uppercase;">
 
