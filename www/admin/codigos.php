@@ -4,6 +4,15 @@
 $mensaje = '';
 $tipo = '';
 
+// ============================================
+// NUEVO: VERIFICAR TOKEN CSRF
+// ============================================
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        die("Acceso denegado: Token de seguridad inválido.");
+    }
+}
+
 // CREAR CÓDIGO
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crear_codigo'])) {
     $codigo    = strtoupper(trim($_POST['codigo'] ?? ''));
@@ -73,6 +82,9 @@ try {
 <div class="admin-section">
     <h3>🎁 <?= t('create_code') ?></h3>
     <form method="POST">
+        <!-- NUEVO: Token CSRF -->
+        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+
         <label for="codigo"><?= t('code') ?></label>
         <input type="text" id="codigo" name="codigo" placeholder="<?= t('code_ph') ?>" required style="text-transform: uppercase;">
 
@@ -122,6 +134,8 @@ try {
                         <td><?= $c['fecha_expiracion'] ? date('d/m/Y', strtotime($c['fecha_expiracion'])) : '-' ?></td>
                         <td>
                             <form method="POST" style="margin:0;">
+                                <!-- NUEVO: Token CSRF -->
+                                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                                 <input type="hidden" name="toggle_id" value="<?= $c['id'] ?>">
                                 <button type="submit" name="toggle_codigo" class="btn-borrar" style="opacity:.85;">
                                     <?= $c['activo'] ? '✅' : '❌' ?>
@@ -130,6 +144,8 @@ try {
                         </td>
                         <td>
                             <form method="POST" style="margin:0;" onsubmit="return confirm('<?= t('are_you_sure') ?>');">
+                                <!-- NUEVO: Token CSRF -->
+                                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                                 <input type="hidden" name="delete_id" value="<?= $c['id'] ?>">
                                 <button type="submit" name="borrar_codigo" class="btn-borrar"><?= t('delete') ?></button>
                             </form>
