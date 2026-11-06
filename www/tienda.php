@@ -7,6 +7,13 @@ if (empty($_SESSION['web_logueado'])) {
     exit;
 }
 
+// ============================================
+// NUEVO: GENERAR TOKEN CSRF SI NO EXISTE
+// ============================================
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
 $web_user = $_SESSION['web_username'] ?? '';
 $web_id   = $_SESSION['web_user_id'] ?? 0;
 
@@ -41,6 +48,11 @@ function enviarItemPorSOAP($personaje, $itemID, $cantidad = 1) {
 // COMPRAR ITEM
 // ============================================
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comprar_item'])) {
+    // NUEVO: Verificar Token CSRF
+    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        die("Acceso denegado: Token de seguridad inválido.");
+    }
+
     $item_id = (int)($_POST['item_id'] ?? 0);
     $char_guid = (int)($_POST['char_guid'] ?? 0);
     if ($item_id <= 0 || $char_guid <= 0) {
@@ -306,6 +318,9 @@ try {
                         <div class="producto-nombre"><?= htmlspecialchars($nombre_prod) ?></div>
                         <div class="producto-precio"><?= t('price') ?>: <span><?= number_format($prod['precio'] / COBRE_POR_ORO) ?> <?= t('gold') ?></span></div>
                         <form method="POST" class="producto-form">
+                            <!-- NUEVO: Token CSRF -->
+                            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                            
                             <input type="hidden" name="item_id" value="<?= $prod['id'] ?>">
                             <?php if (empty($personajes)): ?>
                                 <p style="color:#ff9aa4; font-size:12px; margin-bottom:10px;"><?= t('no_chars') ?></p>
