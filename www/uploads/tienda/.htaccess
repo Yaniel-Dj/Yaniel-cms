@@ -1,0 +1,13 @@
+# ==========================================
+# SEGURIDAD Y VISUALIZACIÓN EN LA CARPETA DE LA TIENDA
+# ==========================================
+
+# 1. Evitar que se ejecute cualquier script (PHP, Python, etc.)
+<FilesMatch "\.(php|php3|php4|php5|phtml|pl|py|jsp|asp|htm|shtml|sh|cgi)$">
+    Require all denied
+</FilesMatch>
+
+# 2. Permitir que las imágenes se vean y descarguen normalmente
+<FilesMatch "\.(jpg|jpeg|png|gif|webp|svg)$">
+    Require all granted
+</FilesMatch>
