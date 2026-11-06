@@ -11,11 +11,6 @@ if (empty($_SESSION['web_logueado']) || $_SESSION['es_admin'] !== true) {
     exit;
 }
 
-// 2. Generar Token CSRF si no existe (para proteger los formularios)
-if (empty($_SESSION['csrf_token'])) {
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-}
-
 $web_user = $_SESSION['web_username'] ?? '';
 $tab = $_GET['tab'] ?? 'items';
 if (!in_array($tab, ['items', 'noticias', 'usuarios', 'reglas', 'codigos', 'rifas'], true)) $tab = 'items';
