@@ -1,3 +1,23 @@
+# ==========================================
+# SEGURIDAD GENERAL (A PRUEBA DE BALAS)
+# ==========================================
+
+# 1. Bloquear el archivo config.php
 <Files "config.php">
     Require all denied
 </Files>
+
+# 2. Bloquear el propio archivo .htaccess
+<Files ".htaccess">
+    Require all denied
+</Files>
+
+# 3. Bloquear cualquier archivo oculto (como .env, .git, .htpasswd)
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
+
+# 4. Bloquear la descarga directa de los archivos JSON
+<FilesMatch "\.(json)$">
+    Require all denied
+</FilesMatch>
