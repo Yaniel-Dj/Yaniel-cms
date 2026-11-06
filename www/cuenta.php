@@ -16,12 +16,21 @@ $tipo = '';
 define('COSTE_CAMBIO_PASS', 500);
 
 // ============================================
-// CARGAR PERSONAJES
+// CARGAR PERSONAJES CON ESTADÍSTICAS
 // ============================================
 $personajes = [];
 try {
     $pdo_char = new PDO("mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . CHAR_DB_NAME . ";charset=utf8", DB_USER, DB_PASS, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
-    $stmt = $pdo_char->prepare("SELECT guid, name, level, race, class, money, online FROM characters WHERE account = ? ORDER BY level DESC");
+    
+    // Hacemos el JOIN con character_stats para traer vida, mana, armadura, etc.
+    $stmt = $pdo_char->prepare("
+        SELECT c.guid, c.name, c.level, c.race, c.class, c.money, c.online,
+               s.maxhealth, s.maxpower1 AS mana, s.armor, s.attackPower, s.spellPower 
+        FROM characters c
+        LEFT JOIN character_stats s ON c.guid = s.guid
+        WHERE c.account = ? 
+        ORDER BY c.level DESC
+    ");
     $stmt->execute([$web_id]);
     $personajes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {}
@@ -57,7 +66,6 @@ try {
 // COMPRAR BOLETOS DE RIFA
 // ============================================
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comprar_boleto_cuenta'])) {
-    // Verificar Token CSRF
     if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
         die("Acceso denegado: Token de seguridad inválido.");
     }
@@ -143,7 +151,6 @@ function calculateSRP6Verifier($username, $password) {
 // PROCESAR CAMBIO DE CONTRASEÑA
 // ============================================
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cambiar_pass'])) {
-    // Verificar Token CSRF
     if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
         die("Acceso denegado: Token de seguridad inválido.");
     }
@@ -236,10 +243,27 @@ $clases = [1 => 'Guerrero', 2 => 'Paladín', 3 => 'Cazador', 4 => 'Pícaro', 5 =
         .seccion-cuenta.activa { display: block; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .char-card { background: rgba(0,10,30,0.6); border: 1px solid rgba(212,175,55,0.3); border-radius: 10px; padding: 15px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
-        .char-info h4 { color: #f0c94a; margin-bottom: 5px; font-size: 16px; }
-        .char-info span { font-size: 12px; color: #9db4d8; margin-right: 10px; }
-        .char-oro { color: #f0c94a; font-weight: bold; font-size: 14px; }
+        /* Estilos mejorados para la tarjeta del personaje */
+        .char-card { 
+            background: rgba(0,10,30,0.6); 
+            border: 1px solid rgba(212,175,55,0.3); 
+            border-radius: 10px; 
+            padding: 20px; 
+            margin-bottom: 20px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 15px; 
+        }
+        .char-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+        .char-info h4 { color: #f0c94a; margin-bottom: 5px; font-size: 18px; }
+        .char-info span { font-size: 13px; color: #9db4d8; margin-right: 10px; }
+        .char-oro { color: #f0c94a; font-weight: bold; font-size: 16px; background: rgba(240,201,74,0.1); padding: 5px 10px; border-radius: 8px; }
+        
+        .char-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; border: 1px solid rgba(212,175,55,0.1); }
+        .stat-box { text-align: center; }
+        .stat-icon { font-size: 18px; margin-bottom: 3px; }
+        .stat-name { font-size: 11px; color: #9db4d8; text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-value { color: #fff; font-weight: bold; font-size: 14px; }
 
         .compra-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 13px; }
         .compra-item:last-child { border-bottom: none; }
@@ -322,19 +346,55 @@ $clases = [1 => 'Guerrero', 2 => 'Paladín', 3 => 'Cazador', 4 => 'Pícaro', 5 =
 
         <?php $tab_actual = $_GET['tab'] ?? 'personajes'; ?>
 
-        <!-- 1. MIS PERSONAJES -->
+        <!-- 1. MIS PERSONAJES (DISEÑO MEJORADO) -->
         <div class="seccion-cuenta <?= $tab_actual === 'personajes' ? 'activa' : '' ?>">
             <?php if (empty($personajes)): ?>
                 <div class="vacio"><?= t('no_characters') ?></div>
             <?php else: ?>
                 <?php foreach ($personajes as $pj): ?>
                     <div class="char-card">
-                        <div class="char-info">
-                            <h4><?= htmlspecialchars($pj['name']) ?> <?php if ($pj['online']): ?><span style="color:#5ac86b; font-size:11px;"><?= t('online_status') ?></span><?php endif; ?></h4>
-                            <span><?= t('level') ?> <?= $pj['level'] ?></span>
-                            <span><?= $razas[$pj['race']] ?? '?' ?> / <?= $clases[$pj['class']] ?? '?' ?></span>
+                        
+                        <!-- Cabecera del personaje -->
+                        <div class="char-header">
+                            <div class="char-info">
+                                <h4>
+                                    <?= htmlspecialchars($pj['name']) ?> 
+                                    <?php if ($pj['online']): ?><span style="color:#5ac86b; font-size:11px;">● <?= t('online_status') ?></span><?php endif; ?>
+                                </h4>
+                                <span>Nivel <?= $pj['level'] ?> — <?= $razas[$pj['race']] ?? '?' ?> / <?= $clases[$pj['class']] ?? '?' ?></span>
+                            </div>
+                            <div class="char-oro">💰 <?= number_format(floor($pj['money'] / COBRE_POR_ORO)) ?> <?= t('gold') ?></div>
                         </div>
-                        <div class="char-oro">💰 <?= number_format(floor($pj['money'] / COBRE_POR_ORO)) ?> <?= t('gold') ?></div>
+
+                        <!-- Estadísticas -->
+                        <div class="char-stats">
+                            <div class="stat-box">
+                                <div class="stat-icon" style="color: #ff5c5c;">❤️</div>
+                                <div class="stat-name">Vida</div>
+                                <div class="stat-value"><?= number_format($pj['maxhealth'] ?? 0) ?></div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-icon" style="color: #3399ff;">🔮</div>
+                                <div class="stat-name">Maná</div>
+                                <div class="stat-value"><?= number_format($pj['mana'] ?? 0) ?></div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-icon" style="color: #f0c94a;">🛡️</div>
+                                <div class="stat-name">Armadura</div>
+                                <div class="stat-value"><?= number_format($pj['armor'] ?? 0) ?></div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-icon" style="color: #ffaa00;">⚔️</div>
+                                <div class="stat-name">Ataque</div>
+                                <div class="stat-value"><?= number_format($pj['attackPower'] ?? 0) ?></div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-icon" style="color: #a335ee;">✨</div>
+                                <div class="stat-name">Poder Mág.</div>
+                                <div class="stat-value"><?= number_format($pj['spellPower'] ?? 0) ?></div>
+                            </div>
+                        </div>
+
                     </div>
                 <?php endforeach; ?>
             <?php endif; ?>
@@ -349,7 +409,6 @@ $clases = [1 => 'Guerrero', 2 => 'Paladín', 3 => 'Cazador', 4 => 'Pícaro', 5 =
                 <div class="vacio"><?= t('no_characters') ?></div>
             <?php else: ?>
                 <form method="POST">
-                    <!-- Token CSRF (ya creado por el login) -->
                     <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
 
                     <label for="char_guid"><?= t('char_that_pays') ?></label>
@@ -405,7 +464,6 @@ $clases = [1 => 'Guerrero', 2 => 'Paladín', 3 => 'Cazador', 4 => 'Pícaro', 5 =
         <div class="seccion-cuenta <?= $tab_actual === 'canjear' ? 'activa' : '' ?>">
             <p style="color:#9db4d8; font-size:13px; margin-bottom:20px;"><?= t('redeem_code') ?></p>
             <form action="canjear.php" method="POST">
-                <!-- Token CSRF (se envía a canjear.php) -->
                 <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
 
                 <label for="codigo"><?= t('code') ?></label>
@@ -439,7 +497,6 @@ $clases = [1 => 'Guerrero', 2 => 'Paladín', 3 => 'Cazador', 4 => 'Pícaro', 5 =
                         <p style="color:#ff9aa4;"><?= t('no_characters') ?></p>
                     <?php else: ?>
                         <form method="POST" style="max-width: 400px; margin: 0 auto;">
-                            <!-- Token CSRF -->
                             <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
 
                             <label for="char_guid_rifa"><?= t('select_char') ?></label>
