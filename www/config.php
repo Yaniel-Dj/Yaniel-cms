@@ -1,5 +1,16 @@
 <?php
 // ============================================
+// SEGURIDAD: OCULTAR ERRORES AL PÚBLICO
+// ============================================
+// No mostrar errores en pantalla (para que los hackers no vean tus tablas)
+ini_set('display_errors', 0);
+ini_set('display_startup_errors', 0);
+ini_set('log_errors', 1);
+// Guardar los errores en un archivo secreto (opcional, pero recomendado)
+ini_set('error_log', __DIR__ . '/error_log.txt');
+error_reporting(E_ALL);
+
+// ============================================
 // CONFIGURACIÓN GLOBAL
 // ============================================
 
