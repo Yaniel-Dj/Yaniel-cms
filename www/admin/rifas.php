@@ -4,15 +4,6 @@
 $mensaje = '';
 $tipo = '';
 
-// ============================================
-// NUEVO: VERIFICAR TOKEN CSRF
-// ============================================
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-        die("Acceso denegado: Token de seguridad inválido.");
-    }
-}
-
 // CREAR RIFA
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crear_rifa'])) {
     $item_entry     = (int)($_POST['item_entry'] ?? 0);
@@ -70,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['toggle_rifa'])) {
     }
 }
 
-// FINALIZAR RIFA (marca como finalizada siempre, aunque SOAP falle)
+// FINALIZAR RIFA
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_rifa'])) {
     $rifa_id = (int)($_POST['rifa_id'] ?? 0);
     if ($rifa_id <= 0) {
@@ -79,7 +70,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_rifa'])) {
         try {
             $pdo_shop = new PDO("mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . SHOP_DB_NAME . ";charset=utf8", DB_USER, DB_PASS, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
             
-            // Verificar que la rifa existe
             $stmt_rifa = $pdo_shop->prepare("SELECT * FROM web_rifas WHERE id = ?");
             $stmt_rifa->execute([$rifa_id]);
             $rifa = $stmt_rifa->fetch(PDO::FETCH_ASSOC);
@@ -94,7 +84,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_rifa'])) {
                 if (empty($boletos)) {
                     $mensaje = t('raffle_no_participants_err') . ' (No se puede finalizar sin participantes)'; $tipo = 'error';
                 } else {
-                    // Elegir ganador
                     $pool = [];
                     foreach ($boletos as $b) {
                         for ($i = 0; $i < $b['cantidad']; $i++) {
@@ -103,11 +92,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_rifa'])) {
                     }
                     $ganador = $pool[array_rand($pool)];
 
-                    // Marcar como finalizada ANTES de SOAP (para que no se quede colgada)
                     $stmt_upd = $pdo_shop->prepare("UPDATE web_rifas SET estado = 'finalizada', ganador_guid = ?, ganador_nombre = ? WHERE id = ?");
                     $stmt_upd->execute([$ganador['guid'], $ganador['name'], $rifa_id]);
 
-                    // Intentar enviar el item por SOAP
                     $detalle_soap = '';
                     try {
                         $conn = new SoapClient(NULL, array(
@@ -133,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_rifa'])) {
     }
 }
 
-// BORRAR RIFA (manual)
+// BORRAR RIFA
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['borrar_rifa'])) {
     $del_id = (int)($_POST['delete_id'] ?? 0);
     if ($del_id > 0) {
@@ -166,9 +153,6 @@ try {
 <div class="admin-section">
     <h3>🎟️ <?= t('create_raffle') ?></h3>
     <form method="POST">
-        <!-- NUEVO: Token CSRF -->
-        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
-
         <label for="item_entry"><?= t('raffle_item_id') ?></label>
         <input type="number" id="item_entry" name="item_entry" required min="1">
 
@@ -248,8 +232,6 @@ try {
                             <div style="display:flex; gap:5px; flex-wrap:wrap;">
                                 <?php if ($r['estado'] !== 'finalizada'): ?>
                                     <form method="POST" style="margin:0;" onsubmit="return confirm('<?= $r['estado'] === 'activa' ? '¿Pausar esta rifa?' : '¿Activar esta rifa?' ?>');">
-                                        <!-- NUEVO: Token CSRF -->
-                                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                                         <input type="hidden" name="toggle_id" value="<?= $r['id'] ?>">
                                         <button type="submit" name="toggle_rifa" class="btn-borrar" style="background:rgba(240,201,74,0.2); border-color:#f0c94a; color:#f0c94a;">
                                             <?= $r['estado'] === 'activa' ? '⏸️ Pausar' : '▶️ Activar' ?>
@@ -257,15 +239,11 @@ try {
                                     </form>
 
                                     <form method="POST" style="margin:0;" onsubmit="return confirm('<?= t('raffle_finish_confirm') ?>');">
-                                        <!-- NUEVO: Token CSRF -->
-                                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                                         <input type="hidden" name="rifa_id" value="<?= $r['id'] ?>">
                                         <button type="submit" name="finalizar_rifa" class="btn-borrar" style="background:rgba(220,53,69,0.3); border-color:#dc3545; color:#ff9aa4;"><?= t('raffle_finish') ?></button>
                                     </form>
                                 <?php else: ?>
                                     <form method="POST" style="margin:0;" onsubmit="return confirm('¿Borrar esta rifa finalizada? Esta acción no se puede deshacer.');">
-                                        <!-- NUEVO: Token CSRF -->
-                                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                                         <input type="hidden" name="delete_id" value="<?= $r['id'] ?>">
                                         <button type="submit" name="borrar_rifa" class="btn-borrar" style="background:rgba(220,53,69,0.3); border-color:#dc3545; color:#ff9aa4;">🗑️ Borrar</button>
                                     </form>
