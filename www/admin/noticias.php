@@ -4,21 +4,9 @@
 $mensaje = '';
 $tipo = '';
 
-// ============================================
-// VERIFICAR TOKEN CSRF
-// ============================================
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-        die("Acceso denegado: Token de seguridad inválido.");
-    }
-}
-
 $noticias_es_file = __DIR__ . '/../noticias_es.json';
 $noticias_en_file = __DIR__ . '/../noticias_en.json';
 
-// ============================================
-// CONFIGURACIÓN DE SUBIDA (MISMA CARPETA QUE TIENDA)
-// ============================================
 $uploads_dir = __DIR__ . '/../uploads/tienda/';
 $uploads_url = 'uploads/tienda/';
 
@@ -26,13 +14,9 @@ if (!is_dir($uploads_dir)) {
     @mkdir($uploads_dir, 0775, true);
 }
 
-/**
- * Sube una imagen, la redimensiona si es muy grande y la guarda como JPG.
- * (Misma lógica que la tienda, pero adaptada para noticias)
- */
 function subirImagenNoticia($file, $uploads_dir) {
     if (empty($file) || !isset($file['name']) || $file['error'] === UPLOAD_ERR_NO_FILE || $file['name'] === '') {
-        return [true, null, null]; // sin imagen
+        return [true, null, null];
     }
     if ($file['error'] !== UPLOAD_ERR_OK) {
         return [false, null, 'Error al subir la imagen (código ' . $file['error'] . ')'];
@@ -70,7 +54,6 @@ function subirImagenNoticia($file, $uploads_dir) {
     $ancho_orig = imagesx($origen);
     $alto_orig  = imagesy($origen);
 
-    // Límite máximo para que no se vea gigante (1200px)
     $max_ancho = 1200;
     $max_alto = 1200;
 
@@ -101,7 +84,6 @@ function subirImagenNoticia($file, $uploads_dir) {
     return [true, $nombre, null];
 }
 
-// Cargar noticias
 $noticias = [];
 if (file_exists($noticias_es_file)) {
     $json = file_get_contents($noticias_es_file);
@@ -246,8 +228,6 @@ usort($noticias, function($a, $b) {
 <div class="admin-section">
     <h3><?= t('create_news') ?></h3>
     <form method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
-
         <label for="titulo_es"><?= t('title') ?> (ES)</label>
         <input type="text" id="titulo_es" name="titulo_es" required>
 
@@ -311,7 +291,6 @@ usort($noticias, function($a, $b) {
                         <div style="display:flex; gap:5px; flex-shrink:0;">
                             <button type="button" class="btn-borrar" style="background:rgba(30,91,198,0.3); border-color:#1e5bc6; color:#9dd8ff;" onclick="mostrarEditNoticia(<?= $n['id'] ?>)"><?= t('edit') ?></button>
                             <form method="POST" style="margin:0;" onsubmit="return confirm('<?= t('are_you_sure') ?>');">
-                                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                                 <input type="hidden" name="borrar_id" value="<?= $n['id'] ?>">
                                 <button type="submit" name="borrar_noticia" class="btn-borrar"><?= t('delete') ?></button>
                             </form>
@@ -320,7 +299,6 @@ usort($noticias, function($a, $b) {
                     
                     <div id="edit-noticia-<?= $n['id'] ?>" style="display:none; margin-top:15px; padding:15px; background:rgba(0,0,0,0.4); border-radius:8px; border:1px solid #444;">
                         <form method="POST" enctype="multipart/form-data">
-                            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                             <input type="hidden" name="noticia_id" value="<?= $n['id'] ?>">
                             
                             <label style="font-size:11px; margin-bottom:3px; display:block;"><?= t('title') ?> (ES)</label>
