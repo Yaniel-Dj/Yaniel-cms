@@ -75,6 +75,73 @@ if (!file_exists($noticias_file)) {
             display: inline-flex; align-items: center; gap: 8px;
             padding: 10px 18px; font-size: 13px;
         }
+
+        /* =========================================
+           NUEVO: ANIMACIONES Y DISEÑO (Solo lo nuevo)
+           ========================================= */
+        @keyframes pendulo-perfecto {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(1.5deg); }
+            75% { transform: rotate(-1.5deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        @keyframes flotar-calavera {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .bloque-animado {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transform-origin: top center;
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        .bloque-1 { animation: pendulo-perfecto 8s linear infinite; }
+        .bloque-1 .skull-img { animation: flotar-calavera 4s ease-in-out infinite; }
+
+        .bloque-2 {
+            animation: pendulo-perfecto 8s linear infinite;
+            animation-delay: -4s; 
+            animation-direction: reverse; 
+        }
+        .bloque-2 .skull-img { animation: flotar-calavera 4s ease-in-out infinite; }
+
+        .chain-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            margin-bottom: -15px; 
+            z-index: 20; 
+        }
+
+        .skull-img {
+            width: 90px; 
+            height: auto;
+            filter: drop-shadow(0 0 15px #588cb8) drop-shadow(0 0 30px #2a4b6b);
+            z-index: 25; 
+        }
+
+        .chain-img {
+            width: 40px; 
+            height: auto;
+            margin-top: -15px; 
+            filter: drop-shadow(0 0 10px rgba(88, 140, 184, 0.6));
+            object-fit: contain;
+            z-index: 15; 
+        }
+
+        .bloque-animado .noticia {
+            position: relative;
+            z-index: 10; 
+            margin-top: 0; 
+            width: 100%; 
+        }
     </style>
 </head>
 <body>
@@ -152,20 +219,43 @@ if (!file_exists($noticias_file)) {
                     <?= t('news_vacio_add') ?> <code>noticias_es.json</code> / <code>noticias_en.json</code>.
                 </div>
             <?php else: ?>
-                <?php foreach ($noticias as $n): ?>
-                    <article class="noticia">
-                        <h2 class="noticia-titulo"><?= htmlspecialchars($n['titulo'] ?? t('news_sin_titulo')) ?></h2>
-                        <div class="noticia-meta">
-                            <?php if (!empty($n['fecha'])): ?>
-                                <span class="meta-fecha"><?= htmlspecialchars(fechaBonita($n['fecha'])) ?></span>
-                            <?php endif; ?>
-                            <?php if (!empty($n['autor'])): ?>
-                                <span class="meta-autor"><?= htmlspecialchars($n['autor']) ?></span>
-                            <?php endif; ?>
+                
+                <?php 
+                // Contador para alternar animaciones
+                $contador = 1; 
+                foreach ($noticias as $n): 
+                    $clase_bloque = ($contador % 2 == 0) ? 'bloque-2' : 'bloque-1';
+                ?>
+                    
+                    <!-- Envoltorio animado -->
+                    <div class="bloque-animado <?= $clase_bloque ?>">
+                        
+                        <!-- Calavera y Cadena -->
+                        <div class="chain-wrapper">
+                            <img src="Img/IMG_3627.webp" alt="Calavera" class="skull-img">
+                            <img src="Img/IMG_3628.webp" alt="Cadena" class="chain-img">
                         </div>
-                        <div class="noticia-contenido"><?= htmlspecialchars($n['contenido'] ?? '') ?></div>
-                    </article>
-                <?php endforeach; ?>
+
+                        <!-- TU ARTÍCULO ORIGINAL -->
+                        <article class="noticia">
+                            <h2 class="noticia-titulo"><?= htmlspecialchars($n['titulo'] ?? t('news_sin_titulo')) ?></h2>
+                            <div class="noticia-meta">
+                                <?php if (!empty($n['fecha'])): ?>
+                                    <span class="meta-fecha"><?= htmlspecialchars(fechaBonita($n['fecha'])) ?></span>
+                                <?php endif; ?>
+                                <?php if (!empty($n['autor'])): ?>
+                                    <span class="meta-autor"><?= htmlspecialchars($n['autor']) ?></span>
+                                <?php endif; ?>
+                            </div>
+                            <div class="noticia-contenido"><?= htmlspecialchars($n['contenido'] ?? '') ?></div>
+                        </article>
+
+                    </div>
+                    
+                <?php 
+                    $contador++; 
+                endforeach; 
+                ?>
             <?php endif; ?>
         </div>
     </div>
