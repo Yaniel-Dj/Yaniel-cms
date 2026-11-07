@@ -4,9 +4,6 @@
 $mensaje = '';
 $tipo = '';
 
-// ============================================
-// DETECTAR SI EL CORE USA account_banned
-// ============================================
 $usa_account_banned = false;
 try {
     $pdo_probe = new PDO(
@@ -19,15 +16,7 @@ try {
     $pdo_probe = null;
 } catch (PDOException $e) {}
 
-// ============================================
-// ACCIONES
-// ============================================
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // NUEVO: Verificar el Token CSRF antes de hacer nada
-    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-        die("Acceso denegado: Token de seguridad inválido.");
-    }
-
     $accion  = $_POST['accion'] ?? '';
     $user_id = (int)($_POST['user_id'] ?? 0);
 
@@ -39,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
             );
 
-            // ---------- BAN ----------
+            // BAN
             if ($accion === 'ban') {
                 $motivo = trim($_POST['motivo_ban'] ?? '');
                 if ($motivo === '') {
@@ -69,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $mensaje = t('saved_successfully'); $tipo = 'exito';
             }
 
-            // ---------- UNBAN ----------
+            // UNBAN
             elseif ($accion === 'unban') {
                 if ($usa_account_banned) {
                     $stmt = $pdo->prepare("UPDATE account_banned SET active = 0 WHERE id = ? AND active = 1");
@@ -81,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $mensaje = t('saved_successfully'); $tipo = 'exito';
             }
 
-            // ---------- RANGO ----------
+            // RANGO
             elseif ($accion === 'rango') {
                 $nuevo_rango = (int)($_POST['gmlevel'] ?? 0);
 
@@ -109,9 +98,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// ============================================
-// FILTRO + PAGINACIÓN
-// ============================================
 $buscar = trim($_GET['buscar'] ?? '');
 
 $por_pagina = 20;
@@ -247,15 +233,12 @@ $total_paginas = (int)ceil($total_usuarios / $por_pagina);
                                               onsubmit="return confirm('<?= t('are_you_sure') ?>');">
                                             <input type="hidden" name="user_id" value="<?= (int)$u['id'] ?>">
                                             <input type="hidden" name="accion" value="unban">
-                                            <!-- NUEVO: Token CSRF -->
-                                            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                                             <button type="submit" class="btn-borrar"
                                                     style="background:rgba(40,167,69,0.3); border-color:#28a745; color:#8ff0a0;">
                                                 <?= t('unban') ?>
                                             </button>
                                         </form>
                                     <?php else: ?>
-                                        <!-- BAN con motivo -->
                                         <details style="margin:0; display:inline-block;">
                                             <summary class="btn-borrar" style="cursor:pointer; list-style:none; display:inline-block; padding:5px 10px; background:rgba(220,53,69,0.3); border:1px solid #dc3545; color:#ff9aa4; border-radius:5px; font-size:11px;">
                                                 <?= t('ban') ?>
@@ -264,8 +247,6 @@ $total_paginas = (int)ceil($total_usuarios / $por_pagina);
                                                 <form method="POST" style="margin:0;" onsubmit="return confirm('<?= t('are_you_sure') ?>');">
                                                     <input type="hidden" name="user_id" value="<?= (int)$u['id'] ?>">
                                                     <input type="hidden" name="accion" value="ban">
-                                                    <!-- NUEVO: Token CSRF -->
-                                                    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                                                     <label style="font-size:10px; color:#ff9aa4; display:block; margin-bottom:4px;">Motivo del ban:</label>
                                                     <input type="text" name="motivo_ban" placeholder="Ej: Uso de hacks"
                                                            maxlength="250" style="width:100%; padding:6px; font-size:11px; margin-bottom:6px; background:rgba(0,0,0,0.6); color:#fff; border:1px solid #444; border-radius:4px;">
@@ -277,12 +258,9 @@ $total_paginas = (int)ceil($total_usuarios / $por_pagina);
                                         </details>
                                     <?php endif; ?>
 
-                                    <!-- RANGO -->
                                     <form method="POST" style="margin:0; display:flex; gap:5px;">
                                         <input type="hidden" name="user_id" value="<?= (int)$u['id'] ?>">
                                         <input type="hidden" name="accion" value="rango">
-                                        <!-- NUEVO: Token CSRF -->
-                                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                                         
                                         <select name="gmlevel"
                                                 style="padding:4px; font-size:11px; width:auto; margin:0; background:rgba(0,0,0,0.5); color:#fff; border:1px solid #444;">
