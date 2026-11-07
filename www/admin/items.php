@@ -4,13 +4,6 @@
 $mensaje = '';
 $tipo = '';
 
-// NUEVO: Verificar el Token CSRF en cualquier acción POST
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-        die("Acceso denegado: Token de seguridad inválido.");
-    }
-}
-
 // ============================================
 // CONFIGURACIÓN DE SUBIDA
 // ============================================
@@ -21,14 +14,9 @@ if (!is_dir($uploads_dir)) {
     @mkdir($uploads_dir, 0775, true);
 }
 
-/**
- * Sube una imagen, la redimensiona a 500x500 (centrada, sin deformar)
- * y la guarda como JPG calidad 85.
- * Devuelve [ok, nombre_archivo|null, error|null]
- */
 function subirImagenTienda($file, $uploads_dir, $tamano = 500) {
     if (empty($file) || !isset($file['name']) || $file['error'] === UPLOAD_ERR_NO_FILE || $file['name'] === '') {
-        return [true, null, null]; // sin imagen
+        return [true, null, null];
     }
     if ($file['error'] !== UPLOAD_ERR_OK) {
         return [false, null, 'Error al subir el archivo (código ' . $file['error'] . ')'];
@@ -43,18 +31,15 @@ function subirImagenTienda($file, $uploads_dir, $tamano = 500) {
         return [false, null, 'Formato no permitido (solo jpg, png, gif, webp)'];
     }
 
-    // Validar que sea imagen real
     $info = @getimagesize($file['tmp_name']);
     if ($info === false) {
         return [false, null, 'El archivo no es una imagen válida'];
     }
 
-    // Comprobar GD
     if (!function_exists('imagecreatetruecolor')) {
         return [false, null, 'La extensión GD de PHP no está activada. Actívala en php.ini'];
     }
 
-    // Cargar la imagen original según su tipo
     $origen = null;
     switch ($info[2]) {
         case IMAGETYPE_JPEG: $origen = @imagecreatefromjpeg($file['tmp_name']); break;
@@ -69,24 +54,20 @@ function subirImagenTienda($file, $uploads_dir, $tamano = 500) {
     $ancho_orig = imagesx($origen);
     $alto_orig  = imagesy($origen);
 
-    // Crear lienzo cuadrado de 500x500 con fondo blanco
     $lienzo = imagecreatetruecolor($tamano, $tamano);
     $blanco = imagecolorallocate($lienzo, 255, 255, 255);
     imagefill($lienzo, 0, 0, $blanco);
 
-    // Calcular escala para que quepa dentro de 500x500 (sin deformar)
     $escala = min($tamano / $ancho_orig, $tamano / $alto_orig);
     $nuevo_ancho = (int)round($ancho_orig * $escala);
     $nuevo_alto  = (int)round($alto_orig * $escala);
 
-    // Centrar la imagen en el lienzo
     $x = (int)round(($tamano - $nuevo_ancho) / 2);
     $y = (int)round(($tamano - $nuevo_alto) / 2);
 
     imagecopyresampled($lienzo, $origen, $x, $y, 0, 0, $nuevo_ancho, $nuevo_alto, $ancho_orig, $alto_orig);
     imagedestroy($origen);
 
-    // Guardar siempre como JPG (calidad 85) para que pese poco
     if (!is_dir($uploads_dir)) {
         @mkdir($uploads_dir, 0775, true);
     }
@@ -256,15 +237,9 @@ try {
     <div class="alerta <?= $tipo ?>"><?= htmlspecialchars($mensaje) ?></div>
 <?php endif; ?>
 
-<!-- ============================================
-     FORM AÑADIR ITEM
-     ============================================ -->
 <div class="admin-section">
     <h3><?= t('add_item') ?></h3>
     <form method="POST" enctype="multipart/form-data">
-        <!-- NUEVO: Token CSRF -->
-        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
-        
         <label for="item_entry"><?= t('item_id') ?></label>
         <input type="number" id="item_entry" name="item_entry" placeholder="Ej: 50818" required min="1">
 
@@ -302,9 +277,6 @@ try {
     </form>
 </div>
 
-<!-- ============================================
-     LISTA DE ITEMS
-     ============================================ -->
 <div class="admin-section">
     <h3><?= t('manage_items') ?></h3>
     <?php if (empty($productos_admin)): ?>
@@ -342,8 +314,6 @@ try {
                         <td><?= number_format($p['precio'] / COBRE_POR_ORO) ?> <?= t('gold') ?></td>
                         <td>
                             <form method="POST" style="margin:0; display:inline;">
-                                <!-- NUEVO: Token CSRF -->
-                                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                                 <input type="hidden" name="toggle_id" value="<?= $p['id'] ?>">
                                 <button type="submit" name="toggle_shop_item" class="btn-borrar" style="opacity:.85;" title="<?= t('active') ?>">
                                     <?= $p['activo'] ? '✅' : '❌' ?>
@@ -354,18 +324,13 @@ try {
                             <div style="display:flex; gap:5px; flex-wrap:wrap;">
                                 <button type="button" class="btn-borrar" style="background:rgba(30,91,198,0.3); border-color:#1e5bc6; color:#9dd8ff;" onclick="mostrarEdicion(<?= $p['id'] ?>)"><?= t('edit') ?></button>
                                 <form method="POST" style="margin:0;" onsubmit="return confirm(<?= json_encode(t('confirm_delete')) ?>);">
-                                    <!-- NUEVO: Token CSRF -->
-                                    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                                     <input type="hidden" name="delete_id" value="<?= $p['id'] ?>">
                                     <button type="submit" name="delete_shop_item" class="btn-borrar"><?= t('delete') ?></button>
                                 </form>
                             </div>
 
-                            <!-- Formulario de edición oculto -->
                             <div id="edit-form-<?= $p['id'] ?>" style="display:none; margin-top:15px; padding:15px; background:rgba(0,0,0,0.4); border-radius:8px; border:1px solid #444; text-align:left;">
                                 <form method="POST" enctype="multipart/form-data">
-                                    <!-- NUEVO: Token CSRF -->
-                                    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                                     <input type="hidden" name="edit_id" value="<?= $p['id'] ?>">
 
                                     <label style="font-size:11px; margin-bottom:3px; display:block;"><?= t('item_name') ?> (ES)</label>
