@@ -66,10 +66,6 @@ try {
 // COMPRAR BOLETOS DE RIFA
 // ============================================
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comprar_boleto_cuenta'])) {
-    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-        die("Acceso denegado: Token de seguridad inválido.");
-    }
-
     $cantidad = max(1, (int)($_POST['cantidad'] ?? 1));
     $char_guid = (int)($_POST['char_guid_rifa'] ?? 0);
 
@@ -151,10 +147,6 @@ function calculateSRP6Verifier($username, $password) {
 // PROCESAR CAMBIO DE CONTRASEÑA
 // ============================================
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cambiar_pass'])) {
-    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-        die("Acceso denegado: Token de seguridad inválido.");
-    }
-
     $pass_actual = $_POST['pass_actual'] ?? '';
     $pass_nueva  = $_POST['pass_nueva'] ?? '';
     $pass_nueva2 = $_POST['pass_nueva2'] ?? '';
@@ -409,8 +401,6 @@ $clases = [1 => 'Guerrero', 2 => 'Paladín', 3 => 'Cazador', 4 => 'Pícaro', 5 =
                 <div class="vacio"><?= t('no_characters') ?></div>
             <?php else: ?>
                 <form method="POST">
-                    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
-
                     <label for="char_guid"><?= t('char_that_pays') ?></label>
                     <select id="char_guid" name="char_guid" required>
                         <option value="">-- <?= t('select_char') ?> --</option>
@@ -464,8 +454,6 @@ $clases = [1 => 'Guerrero', 2 => 'Paladín', 3 => 'Cazador', 4 => 'Pícaro', 5 =
         <div class="seccion-cuenta <?= $tab_actual === 'canjear' ? 'activa' : '' ?>">
             <p style="color:#9db4d8; font-size:13px; margin-bottom:20px;"><?= t('redeem_code') ?></p>
             <form action="canjear.php" method="POST">
-                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
-
                 <label for="codigo"><?= t('code') ?></label>
                 <input type="text" id="codigo" name="codigo" placeholder="<?= t('code_ph') ?>" required style="text-transform: uppercase;">
                 <label for="char_guid_canjear"><?= t('select_char') ?></label>
@@ -497,8 +485,6 @@ $clases = [1 => 'Guerrero', 2 => 'Paladín', 3 => 'Cazador', 4 => 'Pícaro', 5 =
                         <p style="color:#ff9aa4;"><?= t('no_characters') ?></p>
                     <?php else: ?>
                         <form method="POST" style="max-width: 400px; margin: 0 auto;">
-                            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
-
                             <label for="char_guid_rifa"><?= t('select_char') ?></label>
                             <select id="char_guid_rifa" name="char_guid_rifa" required>
                                 <option value="">-- <?= t('select_char') ?> --</option>
