@@ -239,6 +239,14 @@ if (!file_exists($noticias_file)) {
                         <!-- TU ARTÍCULO ORIGINAL -->
                         <article class="noticia">
                             <h2 class="noticia-titulo"><?= htmlspecialchars($n['titulo'] ?? t('news_sin_titulo')) ?></h2>
+                            
+                            <!-- NUEVO: Imagen de portada (si existe en el JSON) -->
+                            <?php if (!empty($n['imagen'])): ?>
+                                <div style="text-align:center; margin: 15px 0;">
+                                    <img src="uploads/tienda/<?= htmlspecialchars($n['imagen']) ?>" alt="Imagen de noticia" style="max-width: 100%; height: auto; border-radius: 8px; border: 1px solid rgba(240,201,74,0.3);">
+                                </div>
+                            <?php endif; ?>
+
                             <div class="noticia-meta">
                                 <?php if (!empty($n['fecha'])): ?>
                                     <span class="meta-fecha"><?= htmlspecialchars(fechaBonita($n['fecha'])) ?></span>
@@ -253,6 +261,7 @@ if (!file_exists($noticias_file)) {
                     </div>
                     
                 <?php 
+                    // NUEVO: Incrementamos el contador
                     $contador++; 
                 endforeach; 
                 ?>
