@@ -33,7 +33,6 @@ $sumaIlvl = 0;
 if (isset($_GET['guid']) && is_numeric($_GET['guid'])) {
     $guid = (int)$_GET['guid'];
 
-    // Datos del personaje
     $stmt = $conn->prepare("SELECT guid, name, class, race, level FROM characters WHERE guid = ?");
     $stmt->bind_param("i", $guid);
     $stmt->execute();
@@ -41,7 +40,6 @@ if (isset($_GET['guid']) && is_numeric($_GET['guid'])) {
     $stmt->close();
 
     if ($personaje) {
-        // Detección de facción
         $razasHorda = [2, 5, 6, 8, 10];
         if (in_array((int)$personaje['race'], $razasHorda)) {
             $esHorda = true;
@@ -55,7 +53,7 @@ if (isset($_GET['guid']) && is_numeric($_GET['guid'])) {
         $logros = $resLogros['total'] ?? 0;
         $stmtLogros->close();
 
-        // Stats del personaje
+        // Stats
         $stmtStats = $conn->prepare("SELECT maxhealth, maxpower1, strength, agility, stamina, intellect, critPct, attackPower FROM character_stats WHERE guid = ?");
         $stmtStats->bind_param("i", $guid);
         $stmtStats->execute();
@@ -77,7 +75,6 @@ if (isset($_GET['guid']) && is_numeric($_GET['guid'])) {
 
         if (!empty($itemsEquipados)) {
             $ids = implode(',', array_unique(array_values($itemsEquipados)));
-            // Consulta con descripción incluida
             $sqlItems = "SELECT entry, name, Quality, icon, ItemLevel, RequiredLevel, armor, dmg_min1, dmg_max1, delay, 
                                 InventoryType, description, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3, 
                                 stat_type4, stat_value4, stat_type5, stat_value5 
@@ -131,7 +128,6 @@ if (isset($_GET['guid']) && is_numeric($_GET['guid'])) {
                         }
                     }
 
-                    // DESCRIPCIÓN DEL ÍTEM (Naranja)
                     if (!empty($item['description'])) {
                         $tooltip .= "<div style='height: 5px;'></div>";
                         $tooltip .= "<div style='color:#ff8000; font-style: italic;'>".$item['description']."</div>";
@@ -183,7 +179,6 @@ if (isset($_GET['guid']) && is_numeric($_GET['guid'])) {
 $conn->close(); 
 $worldConn->close();
 
-// Funciones de colores
 function colorCalidad($q) {
     $colores = [0=>'#9d9d9d', 1=>'#ffffff', 2=>'#1eff00', 3=>'#0070dd', 4=>'#a335ee', 5=>'#ff8000', 7=>'#e6cc80'];
     return $colores[(int)$q] ?? '#fff';
@@ -209,32 +204,26 @@ $colorClase = $personaje ? colorDeClase($personaje['class']) : '#888888';
     body { background: #000; color: #fff; display: flex; justify-content: center; padding: 20px; }
     .contenedor { width: 100%; max-width: 800px; }
     
-    /* SELECTOR */
     .selector { margin-bottom: 20px; display: flex; gap: 10px; }
     .selector select, .selector button { padding: 8px 15px; background: #111; border: 1px solid #333; color: #fff; border-radius: 4px; outline: none; }
     .selector button { background: #d4af37; color: #000; font-weight: bold; cursor: pointer; }
     
-    /* CABECERA */
     .cabecera { display: flex; align-items: center; gap: 15px; border-bottom: 1px solid #222; padding-bottom: 15px; margin-bottom: 20px; }
     .escudo { width: 50px; height: 50px; border-radius: 50%; border: 2px solid #333; background-color: <?= $colorClase ?>; box-shadow: inset 0 0 15px rgba(0,0,0,0.8); }
     .info h1 { font-size: 22px; margin-bottom: 5px; color: #fff; }
     .info .detalles { font-size: 13px; color: #888; }
     
-    /* MÉTRICAS */
     .metricas { display: flex; gap: 30px; margin-bottom: 20px; background: #111; padding: 12px 20px; border-radius: 4px; border: 1px solid #222; width: fit-content; }
     .metrica { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: bold; color: #888; }
     .metrica span { color: #d4af37; font-size: 16px; }
 
-    /* MUÑECO */
     .zona-equipo { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; min-height: 420px; }
     .columna { display: flex; flex-direction: column; gap: 8px; }
     .columna.izq { align-items: flex-end; }
     .columna.der { align-items: flex-start; }
     
-    /* RANURAS Y BORDES */
     .slot { width: 46px; height: 46px; background: #000; border: 1px solid #222; border-radius: 4px; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer; overflow: hidden;}
     
-    /* COLORES DE RAREZA */
     .slot.q-pobre { border: 1px solid #9d9d9d; } 
     .slot.q-comun { border: 1px solid #ffffff; }
     .slot.q-bueno { border: 1px solid #1eff00; } 
@@ -242,7 +231,6 @@ $colorClase = $personaje ? colorDeClase($personaje['class']) : '#888888';
     .slot.q-epico { border: 1px solid #a335ee; } 
     .slot.q-legendario { border: 1px solid #ff8000; }
 
-    /* ICONOS CSS */
     .icono-css { width: 26px; height: 26px; background-color: #666; position: relative; display: none; }
     .slot.activo .icono-css { display: block; }
     .icono-cabeza { border-radius: 12px 12px 4px 4px; clip-path: polygon(20% 0%, 80% 0%, 100% 40%, 100% 100%, 0% 100%, 0% 40%); }
@@ -258,7 +246,6 @@ $colorClase = $personaje ? colorDeClase($personaje['class']) : '#888888';
     .icono-anillo { border-radius: 50%; border: 5px solid #666; background: transparent; }
     .icono-otro { border-radius: 50%; }
 
-    /* TOOLTIP */
     .slot .tooltip {
         visibility: hidden; opacity: 0; width: 240px; background: rgba(0, 0, 0, 0.95);
         border: 1px solid #c9a227; border-radius: 2px; padding: 10px; position: absolute; z-index: 100;
@@ -274,7 +261,6 @@ $colorClase = $personaje ? colorDeClase($personaje['class']) : '#888888';
     .columna.der .tooltip::after { left: auto; right: 20px; }
     .tooltip-nombre { font-size: 14px; font-weight: bold; margin-bottom: 2px; }
     
-    /* CENTRO CON FACCIÓN */
     .centro { flex: 1; display: flex; align-items: center; justify-content: center; min-height: 400px; }
     .faccion-fondo { width: 220px; height: 220px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid #222; box-shadow: inset 0 0 50px rgba(0,0,0,0.8); }
     .faccion-alianza { background: radial-gradient(circle, rgba(0, 112, 221, 0.4) 0%, rgba(0, 0, 0, 1) 70%); border-color: #0056b3; }
@@ -283,7 +269,6 @@ $colorClase = $personaje ? colorDeClase($personaje['class']) : '#888888';
     .faccion-alianza .escudo-faccion { background-color: #0056b3; }
     .faccion-horda .escudo-faccion { background-color: #8a1528; }
 
-    /* RESTO DE SECCIONES */
     .armas { display: flex; justify-content: center; gap: 8px; margin-bottom: 30px; }
     .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px 30px; border-top: 1px solid #222; padding-top: 20px; margin-bottom: 20px; }
     .stat { display: flex; align-items: center; gap: 12px; }
@@ -295,7 +280,7 @@ $colorClase = $personaje ? colorDeClase($personaje['class']) : '#888888';
     .profesiones h3 { font-size: 12px; color: #888; text-transform: uppercase; margin-bottom: 10px; }
     .caja-profesiones { display: flex; gap: 15px; flex-wrap: wrap; }
     .profesion { display: flex; align-items: center; gap: 10px; background: #111; border: 1px solid #222; border-radius: 4px; padding: 8px 15px 8px 8px; min-width: 180px; }
-    .profesion-icono { width: 32px; height: 32px; background-color: #333; border-radius: 4px; border: 1px solid #555; display:flex; align-items:center; justify-content:center; font-size:10px; color:#888; }
+    .profesion-icono { width: 32px; height: 32px; background-color: #333; border-radius: 4px; border: 1px solid #555; display:flex; align-items:center; justify-content:center; font-size:12px; color:#d4af37; font-weight:bold; }
     .profesion-nombre { font-size: 13px; font-weight: bold; color: #fff;}
     .profesion-nivel { font-size: 11px; color: #888; }
 </style>
@@ -335,7 +320,7 @@ $colorClase = $personaje ? colorDeClase($personaje['class']) : '#888888';
         $colorNombre = $item ? colorCalidad($item['Quality']) : '#fff';
         
         $iconos = [
-            0 => 'icono-cabeza', 1 => 'icono-otro', 2 => 'icono-hombros', 3 => 'icono-pecho',
+            0 => 'icono-cabeza', 1 => 'icono-otro', 2 => 'icono-hombros', 3 => 'icono-otro', // Camisa corregida
             4 => 'icono-pecho', 5 => 'icono-cintura', 6 => 'icono-piernas', 7 => 'icono-pies',
             8 => 'icono-otro', 9 => 'icono-manos', 10 => 'icono-anillo', 11 => 'icono-anillo',
             12 => 'icono-otro', 13 => 'icono-otro', 14 => 'icono-hombros', 15 => 'icono-arma',
@@ -398,7 +383,8 @@ $colorClase = $personaje ? colorDeClase($personaje['class']) : '#888888';
             <?php else: ?>
                 <?php foreach ($profesiones as $prof): ?>
                     <div class="profesion">
-                        <div class="profesion-icono">P</div>
+                        <!-- Ahora toma la inicial del nombre -->
+                        <div class="profesion-icono"><?= substr($prof['nombre'], 0, 1) ?></div>
                         <div class="profesion-info">
                             <span class="profesion-nombre"><?= $prof['nombre'] ?></span>
                             <span class="profesion-nivel"><?= $prof['nivel'] ?> / <?= $prof['max'] ?></span>
