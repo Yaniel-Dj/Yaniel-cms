@@ -7,16 +7,6 @@ $reglas_en_file = __DIR__ . '/../reglas_en.json';
 $mensaje = '';
 $tipo = '';
 
-// ============================================
-// NUEVO: VERIFICAR TOKEN CSRF
-// ============================================
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-        die("Acceso denegado: Token de seguridad inválido.");
-    }
-}
-
-// Cargar reglas ES
 $reglas = [];
 if (file_exists($reglas_es_file)) {
     $json = file_get_contents($reglas_es_file);
@@ -24,7 +14,6 @@ if (file_exists($reglas_es_file)) {
     if (is_array($datos)) $reglas = $datos;
 }
 
-// Cargar reglas EN
 $reglas_en = [];
 if (file_exists($reglas_en_file)) {
     $json = file_get_contents($reglas_en_file);
@@ -113,7 +102,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_regla'])) {
     }
 }
 
-// Mensajes
 if (isset($_GET['msg'])) {
     if ($_GET['msg'] === 'created') { $mensaje = t('rule_added'); $tipo = 'exito'; }
     elseif ($_GET['msg'] === 'updated') { $mensaje = t('rule_updated'); $tipo = 'exito'; }
@@ -130,9 +118,6 @@ usort($reglas, function($a, $b) { return (int)$a['id'] - (int)$b['id']; });
 <div class="admin-section">
     <h3>📖 <?= t('add_rule') ?></h3>
     <form method="POST">
-        <!-- NUEVO: Token CSRF -->
-        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
-
         <label for="regla_titulo_es"><?= t('rule_title') ?> (ES)</label>
         <input type="text" id="regla_titulo_es" name="regla_titulo_es" required>
 
@@ -172,8 +157,6 @@ usort($reglas, function($a, $b) { return (int)$a['id'] - (int)$b['id']; });
                         <div style="display:flex; gap:5px; flex-shrink:0;">
                             <button type="button" class="btn-borrar" style="background:rgba(30,91,198,0.3); border-color:#1e5bc6; color:#9dd8ff;" onclick="mostrarEditRegla(<?= $r['id'] ?>)"><?= t('edit') ?></button>
                             <form method="POST" style="margin:0;" onsubmit="return confirm('<?= t('are_you_sure') ?>');">
-                                <!-- NUEVO: Token CSRF -->
-                                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                                 <input type="hidden" name="delete_id" value="<?= $r['id'] ?>">
                                 <button type="submit" name="delete_regla" class="btn-borrar"><?= t('delete') ?></button>
                             </form>
@@ -182,9 +165,6 @@ usort($reglas, function($a, $b) { return (int)$a['id'] - (int)$b['id']; });
                     
                     <div id="edit-regla-<?= $r['id'] ?>" style="display:none; margin-top:15px; padding:15px; background:rgba(0,0,0,0.4); border-radius:8px; border:1px solid #444;">
                         <form method="POST">
-                            <!-- NUEVO: Token CSRF -->
-                            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
-                            
                             <input type="hidden" name="regla_id" value="<?= $r['id'] ?>">
                             <label style="font-size:11px; margin-bottom:3px; display:block;"><?= t('rule_title') ?> (ES)</label>
                             <input type="text" name="edit_titulo_es" value="<?= htmlspecialchars($r['titulo']) ?>" required style="margin-bottom:8px; padding:8px; font-size:13px;">
