@@ -11,13 +11,11 @@ if ($conn->connect_error || $worldConn->connect_error) {
 $conn->set_charset("utf8mb4"); 
 $worldConn->set_charset("utf8mb4");
 
-// Datos por defecto
 $personaje = null;
 $equipo = [];
 $stats = null;
 $esHorda = false;
 
-// Si se selecciona un personaje
 if (isset($_GET['guid']) && is_numeric($_GET['guid'])) {
     $guid = (int)$_GET['guid'];
 
@@ -50,14 +48,14 @@ if (isset($_GET['guid']) && is_numeric($_GET['guid'])) {
 
         if (!empty($itemsEquipados)) {
             $ids = implode(',', array_unique(array_values($itemsEquipados)));
-            $sqlItems = "SELECT entry, name, Quality, icon, ItemLevel, RequiredLevel, armor, dmg_min1, dmg_max1, delay, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3, stat_type4, stat_value4, stat_type5, stat_value5 FROM item_template WHERE entry IN ($ids)";
+            $sqlItems = "SELECT entry, name, Quality, icon, ItemLevel, armor, dmg_min1, dmg_max1, delay, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3, stat_type4, stat_value4, stat_type5, stat_value5 FROM item_template WHERE entry IN ($ids)";
             $resItems = $worldConn->query($sqlItems);
             
             $statNames = [3 => 'Agilidad', 4 => 'Fuerza', 5 => 'Intelecto', 6 => 'Espíritu', 7 => 'Aguante', 32 => 'Golpe Crítico', 36 => 'Celeridad', 38 => 'Poder de Ataque', 43 => 'Poder con Hechizos'];
 
             if ($resItems) {
                 while ($item = $resItems->fetch_assoc()) {
-                    // Construir Tooltip
+                    // Tooltip
                     $tooltip = "<div style='color:#888; font-size:11px;'>{$item['ItemLevel']} Nivel de Objeto</div>";
                     if ($item['armor'] > 0) $tooltip .= "<div style='color:#fff;'>{$item['armor']} de Armadura</div>";
                     if ($item['dmg_min1'] > 0 && $item['delay'] > 0) {
@@ -73,7 +71,6 @@ if (isset($_GET['guid']) && is_numeric($_GET['guid'])) {
                     }
                     $item['tooltip_html'] = $tooltip;
 
-                    // Asignar al slot
                     foreach ($itemsEquipados as $slot => $id) {
                         if ($id == $item['entry']) $equipo[$slot] = $item;
                     }
@@ -85,7 +82,7 @@ if (isset($_GET['guid']) && is_numeric($_GET['guid'])) {
 $conn->close(); 
 $worldConn->close();
 
-// Funciones de colores
+// Funciones de Colores
 function colorDeClase($classId) {
     $colores = [1=>'#C79C6E', 2=>'#F58CBA', 3=>'#ABD473', 4=>'#FFF569', 5=>'#FFFFFF', 6=>'#C41F3B', 7=>'#0070DE', 8=>'#69CCF0', 9=>'#9482C9', 11=>'#FF7D0A'];
     return $colores[(int)$classId] ?? '#888888';
@@ -105,11 +102,29 @@ function dibujarSlot($slotNum, $equipo) {
     $calidad = $item ? calidadClase($item['Quality']) : '';
     $colorNombre = $item ? colorCalidad($item['Quality']) : '#fff';
     
+    // Mapeo de los 19 slots a los nombres de tus archivos .gif
+    $slotBgImages = [
+        0 => 'head', 1 => 'neck', 2 => 'shoulder', 14 => 'back',
+        4 => 'chest', 3 => 'shirt', 18 => 'tabard', 8 => 'wrist',
+        9 => 'hands', 5 => 'waist', 6 => 'legs', 7 => 'feet',
+        10 => 'ring', 11 => 'ring', 12 => 'trinket', 13 => 'trinket',
+        15 => 'mainhand', 16 => 'offhand', 17 => 'ranged'
+    ];
+    
+    $bgImage = isset($slotBgImages[$slotNum]) ? $slotBgImages[$slotNum] . '.gif' : '';
+
     echo '<div class="gear-slot '.$calidad.'">';
+    
+    // Si NO hay ítem, mostramos la imagen .gif de fondo de Fusion
+    if (!$item && $bgImage) {
+        echo '<img src="Img/armeria/slots/'.$bgImage.'" class="slot-placeholder">';
+    }
+
+    // Si HAY ítem, mostramos el icono real (.jpg) encima
     if ($item) {
-        // RUTA LOCAL A TUS ICONOS (Asegúrate de que la carpeta se llame así)
         $icono = 'Img/armeria/iconos/' . $item['icon'] . '.jpg';
-        echo '<img src="'.$icono.'" onerror="this.src=\'Img/armeria/iconos/inv_misc_questionmark.jpg\'">';
+        echo '<img src="'.$icono.'" class="item-icon-img" onerror="this.src=\'Img/armeria/iconos/inv_misc_questionmark.jpg\'">';
+        
         echo '<div class="tooltip">';
         echo '<div style="color:'.$colorNombre.'; font-size:14px; font-weight:bold; margin-bottom:4px;">'.$item['name'].'</div>';
         echo $item['tooltip_html']; 
@@ -135,7 +150,6 @@ function dibujarSlot($slotNum, $equipo) {
             <select class="form-control" name="guid" required onchange="this.form.submit()">
                 <option value="">Selecciona un personaje...</option>
                 <?php 
-                // Re-conectamos rápido solo para el dropdown
                 $conn2 = new mysqli(DB_HOST, DB_USER, DB_PASS, CHAR_DB_NAME, (int)DB_PORT);
                 $resP = $conn2->query("SELECT guid, name, level FROM characters ORDER BY level DESC LIMIT 100");
                 while($p = $resP->fetch_assoc()){
@@ -151,16 +165,17 @@ function dibujarSlot($slotNum, $equipo) {
 
     <?php if ($personaje): ?>
     <!-- VISTA DEL PERSONAJE -->
-    <div id="character_view" style="display:block;">
+    <div id="character_view">
         <div class="char-header">
-            <!-- Avatar Local -->
+            <!-- Avatar .gif local -->
             <img class="char-avatar" src="Img/armeria/avatares/<?= $personaje['name'] ?>.gif" onerror="this.src='Img/armeria/avatares/default.gif'">
             <div>
                 <h2 class="char-title" style="color: <?= colorDeClase($personaje['class']) ?>"><?= htmlspecialchars($personaje['name']) ?></h2>
                 <div class="char-subtitle">Nivel <?= $personaje['level'] ?> · Raza ID <?= $personaje['race'] ?></div>
             </div>
             <div style="margin-left: auto;">
-                <span class="<?= $esHorda ? 'faction-2' : 'faction-1' ?>"></span>
+                <!-- Icono de Facción .gif local -->
+                <img src="Img/armeria/facciones/<?= $esHorda ? '2' : '1' ?>.gif" style="width: 50px; height: auto;">
             </div>
         </div>
 
