@@ -1,78 +1,368 @@
-body { background-color: #0b0e14; color: #a0aab8; font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; padding: 20px; }
-.container { max-width: 1000px; margin: 0 auto; }
+/* =========================================
+   1. ESTILOS GLOBALES Y FONDO
+   ========================================= */
+body {
+    background-color: #0b0e14;
+    color: #a0aab8;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
 
-.page-subbody { background: #151a24; border: 1px solid #222a38; border-radius: 4px; padding: 20px; margin-bottom: 20px; }
-.input-group { display: flex; gap: 10px; }
-.form-control { background: #0b0e14; border: 1px solid #222a38; color: #fff; padding: 10px 15px; border-radius: 4px; outline: none; width: 100%; max-width: 400px; }
-.nice_button { background: #d4af37; color: #000; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.2s; }
-.nice_button:hover { background: #f1c40f; }
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
 
-#character_view { background: #151a24; border: 1px solid #222a38; border-radius: 4px; padding: 20px; }
-.char-header { display: flex; align-items: center; gap: 15px; border-bottom: 1px solid #222a38; padding-bottom: 15px; margin-bottom: 20px; }
-.char-avatar { width: 64px; height: 64px; border-radius: 4px; border: 2px solid #222a38; background: #0b0e14; object-fit: cover; }
-.char-title { font-size: 24px; font-weight: bold; margin: 0 0 5px 0; text-shadow: 0 0 10px rgba(0,0,0,0.5); }
-.char-subtitle { font-size: 13px; color: #666; }
+/* =========================================
+   2. BARRA DE BÚSQUEDA (Estilo FusionCMS)
+   ========================================= */
+.page-subbody {
+    background: #151a24;
+    border: 1px solid #222a38;
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
 
-.equipment-wrapper { display: flex; flex-direction: column; align-items: center; width: 100%; }
-.equipment-row { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 600px; margin-bottom: 15px; }
-.gear-column { display: flex; flex-direction: column; gap: 8px; }
-.gear-center { display: flex; align-items: center; justify-content: center; flex: 1; }
+.input-group {
+    display: flex;
+    gap: 10px;
+}
 
-/* Escudo Central (Fondo) */
-.faction-bg { width: 180px; height: 180px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid #222a38; }
-.faction-bg.alianza { background: radial-gradient(circle, rgba(0,112,221,0.2) 0%, rgba(11,14,20,1) 70%); border-color: #0056b3; }
-.faction-bg.horda { background: radial-gradient(circle, rgba(196,31,59,0.2) 0%, rgba(11,14,20,1) 70%); border-color: #8a1528; }
+.form-control {
+    background: #0b0e14;
+    border: 1px solid #222a38;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 4px;
+    outline: none;
+    width: 100%;
+}
 
-.bottom-slots { display: flex; gap: 10px; justify-content: center; margin-top: 10px; padding-top: 15px; border-top: 1px solid #222a38; width: 100%; max-width: 600px; }
+.form-control:focus {
+    border-color: #d4af37;
+}
 
-/* --- SLOTS --- */
-.gear-slot { 
-    width: 46px; height: 46px; 
-    background: #0b0e14; border: 1px solid #222a38; 
-    border-radius: 4px; position: relative; cursor: pointer; 
-    display: flex; align-items: center; justify-content: center; 
+.nice_button {
+    background: #d4af37;
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.nice_button:hover {
+    background: #f1c40f;
+}
+
+/* =========================================
+   3. TABLA DE RESULTADOS (DataTables)
+   ========================================= */
+.table-responsive {
+    background: #151a24;
+    border: 1px solid #222a38;
+    border-radius: 4px;
+    padding: 20px;
+}
+
+.nice_table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.nice_table thead th {
+    background: #0b0e14;
+    color: #d4af37;
+    border-bottom: 2px solid #222a38;
+    padding: 12px;
+    text-align: left;
+}
+
+.nice_table tbody td {
+    padding: 12px;
+    border-bottom: 1px solid #222a38;
+}
+
+.nice_table tbody tr:hover {
+    background: #1c2331;
+}
+
+/* Colores de Clase (Para los nombres de los personajes) */
+.color-c1 { color: #C79C6E; }
+.color-c2 { color: #F58CBA; }
+.color-c3 { color: #ABD473; }
+.color-c4 { color: #FFF569; }
+.color-c5 { color: #FFFFFF; }
+.color-c6 { color: #C41F3B; }
+.color-c7 { color: #0070DE; }
+.color-c8 { color: #69CCF0; }
+.color-c9 { color: #9482C9; }
+.color-c11 { color: #FF7D0A; }
+
+/* Personalización de los botones de DataTables */
+.dataTables_wrapper .dataTables_filter, 
+.dataTables_wrapper .dataTables_length { display: none; }
+.dataTables_wrapper .dataTables_info, 
+.dataTables_wrapper .dataTables_paginate { padding-top: 15px; color: #666; }
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    color: #a0aab8 !important;
+    border: 1px solid #222a38;
+    background: #0b0e14;
+    border-radius: 4px;
+    padding: 5px 10px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background: #d4af37 !important;
+    color: #000 !important;
+    border-color: #d4af37;
+}
+
+/* =========================================
+   4. FACCIONES Y AVATARES (Imágenes Locales)
+   ========================================= */
+.faction-1 {
+    background-image: url('../Img/armeria/facciones/1.png'); /* Si usas .gif, cámbialo aquí */
+    width: 45px;
+    height: 30px;
+    display: inline-block;
+    vertical-align: middle;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+}
+
+.faction-2 {
+    background-image: url('../Img/armeria/facciones/2.png');
+    width: 45px;
+    height: 30px;
+    display: inline-block;
+    vertical-align: middle;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+}
+
+.char_avatar {
+    height: 33px;
+    width: 33px;
+    border-radius: 4px;
+    vertical-align: middle;
+}
+
+/* =========================================
+   5. VISTA DEL PERSONAJE (Estructura 8-8-3)
+   ========================================= */
+#character_view {
+    background: #151a24;
+    border: 1px solid #222a38;
+    border-radius: 4px;
+    padding: 20px;
+}
+
+.char-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-bottom: 1px solid #222a38;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.char-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 4px;
+    border: 2px solid #222a38;
+    background: #0b0e14;
+    object-fit: cover;
+}
+
+.char-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0 0 5px 0;
+    text-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.char-subtitle {
+    font-size: 13px;
+    color: #666;
+}
+
+/* Contenedor del equipo */
+.equipment-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.equipment-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 15px;
+}
+
+.gear-column {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.gear-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+}
+
+/* Escudo central */
+.faction-bg {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #222a38;
+}
+
+.faction-bg.alianza {
+    background: radial-gradient(circle, rgba(0,112,221,0.2) 0%, rgba(11,14,20,1) 70%);
+    border-color: #0056b3;
+}
+
+.faction-bg.horda {
+    background: radial-gradient(circle, rgba(196,31,59,0.2) 0%, rgba(11,14,20,1) 70%);
+    border-color: #8a1528;
+}
+
+/* Las 3 ranuras de abajo */
+.bottom-slots {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+    padding-top: 15px;
+    border-top: 1px solid #222a38;
+    width: 100%;
+    max-width: 600px;
+}
+
+/* =========================================
+   6. LOS SLOTS (Cajas con siluetas .gif)
+   ========================================= */
+.gear-slot {
+    width: 48px;
+    height: 48px;
+    background: #0b0e14;
+    border: 1px solid #222a38;
+    border-radius: 4px;
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     overflow: hidden;
 }
 
-/* La imagen .gif de fondo (Silueta) */
+/* La imagen .gif de fondo */
 .slot-placeholder {
     position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     object-fit: contain;
-    opacity: 0.6; /* Un poco transparente para que parezca ranura vacía */
+    opacity: 0.6;
     z-index: 1;
 }
 
-/* El icono real del ítem (Tapa la silueta si hay equipo) */
-.item-icon-img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    z-index: 2;
-    position: relative;
+/* Colores de Calidad (Bordes que resaltan la ranura) */
+.gear-slot.q0 { border: 1px solid #9d9d9d; } 
+.gear-slot.q1 { border: 1px solid #ffffff; }
+.gear-slot.q2 { border: 1px solid #1eff00; box-shadow: inset 0 0 8px rgba(30, 255, 0, 0.4); } 
+.gear-slot.q3 { border: 1px solid #0070dd; box-shadow: inset 0 0 8px rgba(0, 112, 221, 0.5); } 
+.gear-slot.q4 { border: 1px solid #a335ee; box-shadow: inset 0 0 8px rgba(163, 53, 238, 0.6); } 
+.gear-slot.q5 { border: 1px solid #ff8000; box-shadow: inset 0 0 10px rgba(255, 128, 0, 0.7); } 
+
+/* Tooltips de los ítems */
+.gear-slot .tooltip {
+    visibility: hidden;
+    opacity: 0;
+    width: 260px;
+    background: rgba(0, 0, 0, 0.95);
+    border: 1px solid #d4af37;
+    padding: 10px;
+    position: absolute;
+    z-index: 100;
+    bottom: 130%;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: opacity 0.2s;
+    font-size: 12px;
+    border-radius: 4px;
+    pointer-events: none;
+    text-align: left;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.8);
 }
 
-/* Colores de Calidad (Bordes) */
-.gear-slot.q0 { border-color: #9d9d9d; } 
-.gear-slot.q1 { border-color: #ffffff; }
-.gear-slot.q2 { border-color: #1eff00; } 
-.gear-slot.q3 { border-color: #0070dd; }
-.gear-slot.q4 { border-color: #a335ee; box-shadow: inset 0 0 8px rgba(163,53,238,0.3); } 
-.gear-slot.q5 { border-color: #ff8000; box-shadow: inset 0 0 8px rgba(255,128,0,0.3); }
-
-/* Tooltips */
-.gear-slot .tooltip { 
-    visibility: hidden; opacity: 0; width: 260px; 
-    background: rgba(0, 0, 0, 0.95); border: 1px solid #d4af37; 
-    padding: 10px; position: absolute; z-index: 100; 
-    bottom: 130%; left: 50%; transform: translateX(-50%); 
-    transition: opacity 0.2s; font-size: 12px; border-radius: 4px; 
-    pointer-events: none; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.8);
+.gear-slot:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
 }
-.gear-slot:hover .tooltip { visibility: visible; opacity: 1; }
-.gear-column.left .tooltip { left: 0; transform: translateX(0); }
-.gear-column.right .tooltip { left: auto; right: 0; transform: translateX(0); }
 
-.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; background: #0b0e14; padding: 15px; border-radius: 4px; border: 1px solid #222a38; margin-top: 20px; }
-.stat-box { display: flex; flex-direction: column; }
-.stat-value { font-size: 18px; font-weight: bold; color: #d4af37; }
-.stat-label { font-size: 11px; color: #666; text-transform: uppercase; }
+.gear-column.left .tooltip {
+    left: 0;
+    transform: translateX(0);
+}
+
+.gear-column.right .tooltip {
+    left: auto;
+    right: 0;
+    transform: translateX(0);
+}
+
+/* =========================================
+   7. STATS (Opcional, si los usas)
+   ========================================= */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    background: #0b0e14;
+    padding: 15px;
+    border-radius: 4px;
+    border: 1px solid #222a38;
+    margin-top: 20px;
+}
+
+.stat-box {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-value {
+    font-size: 18px;
+    font-weight: bold;
+    color: #d4af37;
+}
+
+.stat-label {
+    font-size: 11px;
+    color: #666;
+    text-transform: uppercase;
+}
