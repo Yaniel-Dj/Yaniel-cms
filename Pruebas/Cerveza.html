@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía Completa: La Fiesta de la Cerveza</title>
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+        background-color: #05080f;
+        background-image: radial-gradient(circle at 50% 0%, #111a2e 0%, #03060a 80%);
+        color: #c9d8f0;
+        line-height: 1.6;
+        padding: 20px;
+    }
+
+    .guia-container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: rgba(10, 14, 23, 0.95);
+        border: 1px solid #3a2e1a;
+        border-radius: 8px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.9), inset 0 0 20px rgba(0,0,0,0.6);
+        padding: 40px;
+        position: relative;
+    }
+
+    /* Esquinas decorativas */
+    .guia-container::before, .guia-container::after {
+        content: '';
+        position: absolute;
+        width: 25px;
+        height: 25px;
+        border: 2px solid #a88438;
+        pointer-events: none;
+    }
+    .guia-container::before {
+        top: -1px; left: -1px;
+        border-right: none; border-bottom: none;
+    }
+    .guia-container::after {
+        bottom: -1px; right: -1px;
+        border-left: none; border-top: none;
+    }
+
+    /* Título */
+    .guia-titulo {
+        text-align: center;
+        margin-bottom: 40px;
+        border-bottom: 2px solid rgba(168, 132, 56, 0.4);
+        padding-bottom: 25px;
+    }
+    .guia-titulo h1 {
+        color: #e3c47d;
+        font-family: 'Georgia', serif;
+        font-size: 42px;
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        text-shadow: 0 0 25px rgba(227, 196, 125, 0.5);
+        margin-bottom: 10px;
+    }
+
+    /* Secciones Generales */
+    .seccion {
+        margin-bottom: 45px;
+    }
+    .seccion-titulo {
+        color: #e3c47d;
+        font-family: 'Georgia', serif;
+        font-size: 26px;
+        border-bottom: 2px solid #3a2e1a;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    .seccion-titulo::before {
+        content: '◆';
+        color: #a88438;
+        font-size: 18px;
+    }
+
+    /* Estilos de textos y listas */
+    h4 {
+        color: #e3c47d;
+        font-size: 18px;
+        margin: 25px 0 10px 0;
+        font-weight: bold;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding-bottom: 5px;
+    }
+    
+    p {
+        margin-bottom: 10px;
+        font-size: 14.5px;
+    }
+
+    ul { list-style: none; padding-left: 0; margin-bottom: 15px; }
+    li { margin-bottom: 8px; padding-left: 22px; position: relative; font-size: 14.5px; }
+    li::before { content: '›'; color: #a88438; position: absolute; left: 0; font-weight: bold; font-size: 18px; top: -2px; }
+    
+    /* Bloques de Misión */
+    .mision {
+        background: rgba(255,255,255,0.02);
+        border-left: 3px solid #a88438;
+        padding: 15px 20px;
+        margin-bottom: 15px;
+        border-radius: 0 6px 6px 0;
+        font-size: 14.5px;
+    }
+    .mision .titulo { color: #e3c47d; font-weight: bold; font-size: 16px; margin-bottom: 8px; }
+    .mision .npc { font-size: 13.5px; color: #9db4d8; margin-bottom: 8px; }
+    .mision .npc span { color: #fff; font-weight: bold; }
+    .mision .objetivo { color: #e6e8ee; margin-bottom: 5px; font-weight: bold; }
+    .mision .objeto { font-size: 13.5px; color: #5ac86b; font-style: italic; margin-bottom: 5px; }
+    .mision .texto-jugador { font-size: 14px; color: #b0c4de; margin-bottom: 5px; }
+    .mision .recompensa { color: #f0c94a; font-size: 13.5px; font-weight: bold; margin-top: 8px; }
+
+    /* Tabla del Vendedor */
+    .tabla-vendedor {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        background: rgba(0,0,0,0.4);
+        font-size: 14px;
+    }
+    .tabla-vendedor th {
+        background: rgba(168, 132, 56, 0.2);
+        color: #e3c47d;
+        padding: 12px;
+        text-align: left;
+        border-bottom: 2px solid #3a2e1a;
+    }
+    .tabla-vendedor td {
+        padding: 10px 12px;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .tabla-vendedor tr:hover td { background: rgba(168, 132, 56, 0.05); }
+
+    /* Logros */
+    .logro {
+        background: rgba(0,0,0,0.4);
+        border: 1px solid rgba(168, 132, 56, 0.2);
+        border-radius: 6px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    .logro-titulo { color: #e3c47d; font-size: 18px; font-weight: bold; margin-bottom: 8px; }
+    .logro-desc { color: #9db4d8; font-size: 14.5px; margin-bottom: 15px; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 10px; }
+    .logro-pasos { font-size: 14.5px; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 4px; border-left: 2px solid #1e5bc6; }
+
+    /* Notas y avisos */
+    .nota {
+        background: rgba(227, 196, 125, 0.08);
+        border: 1px solid rgba(227, 196, 125, 0.3);
+        padding: 15px 20px;
+        margin: 20px 0;
+        border-radius: 6px;
+        font-size: 14px;
+    }
+
+    @media (max-width: 768px) {
+        .guia-container { padding: 20px; }
+        .guia-titulo h1 { font-size: 28px; }
+        .seccion-titulo { font-size: 20px; }
+        .tabla-vendedor { font-size: 12px; }
+        .tabla-vendedor th, .tabla-vendedor td { padding: 6px; }
+    }
+    
+    .alianza { color: #5bc0de; font-weight: bold; }
+    .horda { color: #d9534f; font-weight: bold; }
+</style>
+</head>
+<body>
+
+<div class="guia-container">
+    
+    <!-- Título -->
+    <div class="guia-titulo">
+        <h1>La Fiesta de la Cerveza</h1>
+    </div>
+
+    <!-- INTRODUCCIÓN -->
+    <div class="seccion">
+        <p>La Fiesta de la Cerveza es una ruidosa celebración que incluye grandes campamentos festivos, ubicados fuera de Orgrimmar y Forjaz, y pequeños campamentos en las afueras de las demás ciudades capitales. En los campamentos principales, los jugadores encontrarán misiones, vendedores, ¡y enormes barriles de cerveza! La Fiesta de la Cerveza en World of Warcraft es una versión en el juego de la feria bávara Oktoberfest, con su propia música y actividades festivas.</p>
+        <p>Los jugadores pueden participar en una variedad de locos eventos durante La Fiesta de la Cerveza, incluyendo carreras de carneros y buscar barriles de cerveza, atrapar wolpertingers, ¡e incluso golpear eleks rosados! Completar las misiones diarias disponibles durante La Fiesta de la Cerveza recompensa a los jugadores con Ficha para la Fiesta de la cerveza, que pueden utilizarse como moneda para comprar ropas festivas y otros objetos especiales. La Fiesta de la Cerveza también incluye un jefe exclusivo de este evento, Coren Cerveza Temible, que suelta objetos de calidad épica y tiene una oportunidad de soltar monturas raras: Gran kodo de la Fiesta de la cerveza o Carnero de la Fiesta de la cerveza presto.</p>
+        <p>Completar todos los logros listados en <span class="alianza">[Alianza]</span> Maestro cervecero o en <span class="horda">[Horda]</span> Maestro cervecero proporcionará al jugador el título Maestro cervecero.</p>
+        
+        <h4>🍺 Fechas</h4>
+        <ul>
+            <li>Empieza el 27 de Septiembre</li>
+            <li>Termina el 13 de Octubre</li>
+        </ul>
+
+        <h4>🍺 Ubicaciones</h4>
+        <ul>
+            <li><span class="alianza">[Alianza]</span> Dun Morogh</li>
+            <li><span class="horda">[Horda]</span> Durotar</li>
+        </ul>
+    </div>
+
+    <!-- OBJETOS -->
+    <div class="seccion">
+        <div class="seccion-titulo">Objetos</div>
+        
+        <h4>Equipo</h4>
+        <ul>
+            <li>Pichel del terror</li>
+            <li>Faca de cerveza temible sangrienta</li>
+            <li>Huevo escabechado pasado</li>
+            <li>Posavasos de cromo de Coren</li>
+            <li>Recuerdo de camorrista</li>
+            <li>Reloj de bolsillo de mitril</li>
+            <li>Talismán Brillobirra burbujeante</li>
+            <li>Talismán Fardobirra amarga</li>
+        </ul>
+
+        <h4>Comidas:</h4>
+        <ul>
+            <li>Costillas de uñagrieta</li>
+            <li>El Vínculo Dorado</li>
+            <li>Filete de talbuk ahumado</li>
+            <li>Salchicha ahumada picante</li>
+            <li>Codorniz asada</li>
+            <li>Salchicha en conserva</li>
+            <li>Filete de jamón curado</li>
+            <li>Salchicha sabrosa</li>
+            <li>Pata de marrano salvaje</li>
+            <li>Salchicha suculenta</li>
+            <li>Pata de cordero</li>
+            <li>Salchichón</li>
+            <li>Anca de carne</li>
+            <li>Cecina dura</li>
+            <li>El pretzel, esencial en la Fiesta de la cerveza</li>
+            <li>Queso con cebolla</li>
+            <li><span class="alianza">[Alianza]</span> Cebadiz clara</li>
+            <li><span class="alianza">[Alianza]</span> Cebadiz oscura</li>
+            <li><span class="alianza">[Alianza]</span> Cebadiz ligera</li>
+            <li><span class="horda">[Horda]</span> Cerveza del Pasito</li>
+            <li><span class="horda">[Horda]</span> Senda de la Cerveza</li>
+            <li><span class="horda">[Horda]</span> Cerveza del Largo Paseo</li>
+            <li>Hidromiel ogro</li>
+            <li>Grog de Gordok</li>
+            <li>Batido proteico</li>
+            <li>Agua de río de la selva</li>
+            <li>Cabeza reducida fuerte</li>
+            <li>Magia cervecera</li>
+            <li>Trueno 45</li>
+        </ul>
+
+        <h4>Vestimentas:</h4>
+        <ul>
+            <li>Sombrero de la Fiesta de la cerveza azul</li>
+            <li>Sombrero de la Fiesta de la cerveza marrón</li>
+            <li>Sombrero de la Fiesta de la cerveza morado</li>
+            <li>Sombrero de la Fiesta de la cerveza verde</li>
+            <li>Traje de la Fiesta de la cerveza</li>
+            <li>Atavío de la Fiesta de la cerveza</li>
+            <li>Botas de la Fiesta de la cerveza</li>
+            <li>Zapatillas de la Fiesta de la cerveza</li>
+        </ul>
+
+        <h4>Varios:</h4>
+        <ul>
+            <li>Cuñete de la Fiesta de la cerveza</li>
+            <li>Jarra de la Fiesta de la cerveza verde</li>
+            <li>Pichel Hierro Negro</li>
+            <li>Jarra de cerveza Hierro Negro</li>
+        </ul>
+
+        <h4>Mascotas:</h4>
+        <ul>
+            <li>Pichel de wolpertinger</li>
+            <li>Paquidermo rosa tamaño pinta</li>
+        </ul>
+
+        <h4>Monturas:</h4>
+        <ul>
+            <li>Carnero de la Fiesta de la cerveza presto</li>
+            <li>Gran kodo de la Fiesta de la cerveza</li>
+        </ul>
+
+        <h4>Recompensa del buscador de mazmorras:</h4>
+        <p>Arqueta con forma de barril. Contiene:</p>
+        <ul>
+            <li>Carnero de la Fiesta de la cerveza presto (2%)</li>
+            <li>Gran kodo de la Fiesta de la cerveza (2%)</li>
+            <li>Pichel del terror (5%)</li>
+            <li>Faca de cerveza temible sangrienta (5%)</li>
+            <li>Emblema de escarcha x2 (100%)</li>
+            <li>Control remoto de Cerveza Temible (5%)</li>
+        </ul>
+    </div>
+
+    <!-- MONEDA Y JEFES -->
+    <div class="seccion">
+        <div class="seccion-titulo">Moneda y Jefes</div>
+        <h4>🍺 Moneda</h4>
+        <p>Ficha para la Fiesta de la cerveza</p>
+
+        <h4>🍺 Jefes del evento</h4>
+        <ul>
+            <li>Coren Cerveza Temible</li>
+        </ul>
+        <p>Instancia: Profundidades de Roca Negra</p>
+    </div>
+
+    <!-- VENDEDORES -->
+    <div class="seccion">
+        <div class="seccion-titulo">Vendedores</div>
+        <p>NPC: <span class="alianza">[Alianza]</span> Belbi Tiratrastos<br>
+        <span class="alianza">[Alianza]</span> Larkin Cebatruenos (Necesitas al menos 1 Ficha para la Fiesta de la cerveza para que muestre la opción de vendedor)<br>
+        <span class="horda">[Horda]</span> Blix Chirimbolo<br>
+        <span class="horda">[Horda]</span> Ray'ma</p>
+        
+        <div style="overflow-x:auto;">
+            <table class="tabla-vendedor">
+                <thead>
+                    <tr>
+                        <th>Ítem</th>
+                        <th>Costo</th>
+                        <th>Necesario para</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Pichel de wolpertinger</td><td>50 <span style="color:#c0c0c0;">Plata</span></td><td>¿Es persistente tu wolpertinger?</td></tr>
+                    <tr><td>Paquidermo rosa tamaño pinta</td><td>Ficha para la Fiesta de la cerveza x100</td><td></td></tr>
+                    <tr><td>Lúpulo de la Fiesta de la cerveza conservado</td><td>Ficha para la Fiesta de la cerveza x20</td><td></td></tr>
+                    <tr><td>Lúpulo de la Fiesta de la cerveza fresco</td><td>Ficha para la Fiesta de la cerveza x2</td><td></td></tr>
+                    <tr><td><span class="alianza">[Alianza]</span> Lúpulo goblin de la Fiesta de la cerveza fresco<br><span class="horda">[Horda]</span> Lúpulo enano de la Fiesta de la cerveza fresco</td><td>Ficha para la Fiesta de la cerveza x5</td><td></td></tr>
+                    <tr><td><span class="alianza">[Alianza]</span> Gafas romance de mejora de aspecto de Belbi<br><span class="horda">[Horda]</span> Gafas romance de mejora de aspecto de Blix</td><td>Ficha para la Fiesta de la cerveza x100</td><td></td></tr>
+                    <tr><td>Cuñete de la Fiesta de la cerveza</td><td>Ficha para la Fiesta de la cerveza x100</td><td></td></tr>
+                    <tr><td>Atavío de la Fiesta de la cerveza</td><td>Ficha para la Fiesta de la cerveza x200</td><td>Perturbar la paz</td></tr>
+                    <tr><td>Traje de la Fiesta de la cerveza</td><td>Ficha para la Fiesta de la cerveza x200</td><td>Perturbar la paz</td></tr>
+                    <tr><td>Zapatillas de la Fiesta de la cerveza</td><td>Ficha para la Fiesta de la cerveza x100</td><td>Perturbar la paz</td></tr>
+                    <tr><td>Botas de la Fiesta de la cerveza</td><td>Ficha para la Fiesta de la cerveza x100</td><td>Perturbar la paz</td></tr>
+                    <tr><td>Sombrero de la Fiesta de la cerveza marrón</td><td>Ficha para la Fiesta de la cerveza x50</td><td>Perturbar la paz</td></tr>
+                    <tr><td>Sombrero de la Fiesta de la cerveza verde</td><td>Ficha para la Fiesta de la cerveza x50</td><td>Perturbar la paz</td></tr>
+                    <tr><td>Sombrero de la Fiesta de la cerveza azul</td><td>Ficha para la Fiesta de la cerveza x50</td><td>Perturbar la paz</td></tr>
+                    <tr><td>Sombrero de la Fiesta de la cerveza morado</td><td>Ficha para la Fiesta de la cerveza x50</td><td>Perturbar la paz</td></tr>
+                    <tr><td><span class="alianza">[Alianza]</span> Formulario de socio del Club de la "Cerveza del Mes"<br><span class="horda">[Horda]</span> Formulario de socio del Club de la "Cerveza del Mes"</td><td>Ficha para la Fiesta de la cerveza x200</td><td>La cerveza del mes</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- EXTRAS -->
+    <div class="seccion">
+        <div class="seccion-titulo">Extras</div>
+        <p>Luego de completar la misión <span class="alianza">[Alianza]</span> Historia de una ida y una vuelta | <span class="horda">[Horda]</span> Historia de una ida y una vuelta habla con:<br>
+        <span class="alianza">[Alianza]</span> Neill Ramstein<br>
+        <span class="horda">[Horda]</span> Maestro de carneros Rayo</p>
+        <p>Verás una opción en la que tendrás que llevar más barriles al Aprendiz de carreras de carneros.</p>
+        <p>Esta no es una misión que aparecerá en tu registro de misiones y no contará para tu total diario. Se reinicia cada 18 horas, por lo que puedes repetirlo con más frecuencia que las misiones diarias.</p>
+        <p>La mecánica que no es de misión te da un Carnero de carreras de alquiler por 4 minutos, con un cd de 18 horas.</p>
+        <p>Ten en cuenta que:<br>
+        Si el buffo del Carnero de carreras de alquiler es disipado o cancelado, deberás esperar al reinicio del cd.<br>
+        Si se está transformado o montado, no será posible montarte en el carnero, pero habrás consumido la carga diaria y tendrás que esperar 18 horas.</p>
+        <p>La mecánica funciona de igual manera que la misión <span class="alianza">[Alianza]</span> Historia de una ida y una vuelta | <span class="horda">[Horda]</span> Historia de una ida y una vuelta, con la excepción de que cada vez que entregues un barril ganarás 30 segundos más del buffo Carnero de carreras de alquiler y Ficha para la Fiesta de la cerveza x2.</p>
+        <p>Independientemente de cualquier factor, el tiempo máximo del buff del carnero es de 15 minutos, por lo que si bien podrás conseguir Ficha para la Fiesta de la cerveza extra realizando esta actividad, la cantidad obtenida no es ilimitada.</p>
+    </div>
+
+    <!-- CONTENIDO -->
+    <div class="seccion">
+        <div class="seccion-titulo">Contenido</div>
+        <ul>
+            <li>Misiones de la Alianza</li>
+            <li>Misiones de la Horda</li>
+            <li>Ataque de los Hierro Negro</li>
+            <li>Club de la cerveza del mes</li>
+            <li>Logros</li>
+        </ul>
+    </div>
+
+    <!-- MISIONES ALIANZA -->
+    <div class="seccion">
+        <div class="seccion-titulo">Misiones de la Alianza</div>
+        
+        <h4>Misiones introductorias (Sólo se puede tomar 1 de ambas)</h4>
+        <ul>
+            <li>[1] <span class="alianza">[Alianza]</span> ¡Fiesta de la Cerveza!</li>
+            <li>[1] <span class="alianza">[Alianza]</span> ¡Bienvenido a la Fiesta de la Cerveza!</li>
+        </ul>
+
+        <h4>Misiones sueltas</h4>
+        <ul>
+            <li>[1] <span class="alianza">[Alianza]</span> ¡Traga y tira!</li>
+        </ul>
+        <p>Desbloquea:</p>
+        <ul>
+            <li>[1][Diaria] <span class="alianza">[Alianza]</span> Ese día que estaba borracho...</li>
+            <li>[1] <span class="alianza">[Alianza]</span> ¡Atrapa al wolpertinger salvaje! (Esta misión no estuvo disponible para todos los reinos originalmente, por lo que no podrá tomarse)</li>
+            <li>[1] <span class="alianza">[Alianza]</span> Elekks rosas a la vista</li>
+            <li>[1] <span class="alianza">[Alianza]</span> Carrera de carneros... o algo parecido</li>
+        </ul>
+        <p>Desbloquea:</p>
+        <ul>
+            <li>[1] <span class="alianza">[Alianza]</span> Historia de una ida y una vuelta</li>
+            <li>[1] <span class="alianza">[Alianza]</span> Otro año, otro recuerdo</li>
+        </ul>
+
+        <p>De las siguientes diarias, sólo se puede escoger 1 por día:</p>
+        <ul>
+            <li>[1][Diaria] <span class="alianza">[Alianza]</span> ¡Grita por los Cebadiz!</li>
+            <li>[1][Diaria] <span class="alianza">[Alianza]</span> ¡Grita por los Cebatruenos!</li>
+            <li>[1] <span class="alianza">[Alianza]</span> La cerveza temible de Cerveza Temible</li>
+            <li>[48] Busca a los saboteadores</li>
+            <li>[1] <span class="alianza">[Alianza]</span> La mejor de las cervezas</li>
+            <li>[1] <span class="alianza">[Alianza]</span> Club de la Cerveza del Mes</li>
+        </ul>
+
+        <h4>Detalle de las misiones de la Alianza</h4>
+
+        <div class="mision">
+            <div class="titulo"><span class="alianza">[Alianza]</span> ¡Fiesta de la Cerveza!</div>
+            <div class="npc">Empieza: <span>Plebeyo humano, Plebeyo elfo de la noche, Plebeyo gnomo, Plebeyo draenei, Plebeyo enano, Plebeyo goblin</span><br>Termina: <span>Ipfelkofer Barril de Hierro</span></div>
+            <div class="objetivo">Objetivo: Habla con el organizador de la Fiesta de la Cerveza.</div>
+            <div class="texto-jugador">El jugador debe hablar con Ipfelkofer Barril de Hierro en Dun Morogh.</div>
+            <div class="recompensa">Recompensas a elegir: Grog de Gordok, Trueno 45, Cebadiz clara</div>
+        </div>
+
+        <div class="mision">
+            <div class="titulo"><span class="alianza">[Alianza]</span> ¡Bienvenido a la Fiesta de la Cerveza!</div>
+            <div class="npc">Empieza: <span>Ipfelkofer Barril de Hierro</span><br>Termina: <span>Ipfelkofer Barril de Hierro</span></div>
+            <div class="texto-jugador">Esta misión no puede aceptarse por lo que el jugador sólo debe hablar con Ipfelkofer Barril de Hierro en Dun Morogh.</div>
+            <div class="recompensa">Recompensas a elegir: Grog de Gordok, Trueno 45, Cebadiz clara</div>
+        </div>
+
+        <div class="mision">
+            <div class="titulo"><span class="alianza">[Alianza]</span> ¡Traga y tira!</div>
+            <div class="npc">Empieza: <span>Boxey Bolahuso</span><br>Termina: <span>Boxey Bolahuso</span></div>
+            <div class="objetivo">Objetivo: Utiliza la jarra de degustación de la Fiesta de la Cerveza sin alcohol para golpear a la G.U.A.O. 5 veces, y luego ve a hablar con Boxey Bolahuso.</div>
+            <div class="texto-jugador">El jugador debe acercarse a las mesas aledañas a Boxey y hacer clic en Jarra de degustación de la Fiesta de la cerveza de obsequio para crear Jarra de degustación de la Fiesta de la cerveza de obsequio.<br>La jarra debe usarse pare pegarle a Gran utilidad autogiratoria oscilante el cual estará caminando de lado a lado.</div>
+            <div class="recompensa">Recompensa: Ficha para la Fiesta de la cerveza x10</div>
+        </div>
+
+        <div class="mision">
+            <div class="titulo"><span class="alianza">[Alianza]</span> Ese día que estaba borracho...</div>
+            <div class="npc">Empieza: <span>Restos de la máquina topo Hierro Negro</span><br>Termina: <span>Boxey Bolahuso</span></div>
+            <div class="objetivo">Objetivo: Habla con Boxey Bolahuso en el campamento de la Fiesta de la Cerveza.</div>
+            <div class="texto-jugador">El jugador debe hablar con Boxey Bolahuso en Dun Morogh.</div>
+            <div class="recompensa">Recompensa: Ficha para la Fiesta de la cerveza x10<br><em>* Visita la sección 🍺 Ataque de los Hierro Negro para saber cómo interactuar con Restos de la máquina topo Hierro Negro</em></div>
+        </div>
+
+        <div class="mision">
+            <div class="titulo"><span class="alianza">[Alianza]</span> Elekks rosas a la vista</div>
+            <div class="npc">Empieza: <span>Goldark Novatada</span><br>Termina: <span>Goldark Novatada</span></div>
+            <div class="objetivo">Objetivo: Visita las terrazas a las afueras de Ventormenta, Darnassus y El Exodar, mata a tres elekks en cada uno de estos lugares y vuelve a ver a Goldrak Novatada. Tienes que llevar las gafas birratizadoras para ver elekks rosas.</div>
+            <div class="objeto">Objeto provisto: Rayo de dispersión de elekk</div>
+            <div class="texto-jugador">El jugador debe matar 3 Elekk rosa de Bruma Azur, 3 Elekk rosa de Teldrassil y 3 Elekk rosa de Elwynn con el Rayo de dispersión de elekk.<br>Para ver a los Elekks es necesario estar extremadamente borracho o tener equipado las Gafas birratizadoras, las cuales pueden conseguirse al hablar con Goldark Novatada.</div>
+            <div class="recompensa">Recompensa: Ficha para la Fiesta de la cerveza x40</div>
+        </div>
+
+        <div class="mision">
+            <div class="titulo"><span class="alianza">[Alianza]</span> Carrera de carneros... o algo parecido</div>
+            <div class="npc">Empieza: <span>Neill Ramstein</span><br>Termina: <span>Neill Ramstein</span></div>
+            <div class="objetivo">Objetivo: Tienes 4 minutos para montar el carnero y mantener 3 niveles de velocidad diferentes durante 8 segundos.</div>
+            <div class="objeto">Objeto provisto: Riendas para carreras de carneros</div>
+            <div class="texto-jugador">El jugador debe mantener 3 niveles de velocidad del carnero durante 8 segundos en cada nivel.</div>
+            <div class="texto-jugador">
+                <strong>¿Cómo usar el carnero?</strong><br>
+                Al empezar las misiones, serás montado en un carnero y recibirás Riendas para carreras de carneros el cual debe usarse para cambiar la velocidad a la que va el carnero:<br>
+                - Nivel de carnero: neutral: Velocidad de movimiento en montura reducida 50%. Pierde 4 Fatiga de carnero cada 2 segundos.<br>
+                - Carnero: trote: Aumenta la velocidad de movimiento en montura un 15%. Puedes mantener esta velocidad usando Riendas para carreras de carneros cada unos cuantos segundos. Pierde 2 Fatiga de carnero cada 2 segundos.<br>
+                - Carnero: medio galope: Aumenta la velocidad de movimiento en montura un 100%. Puedes mantener esta velocidad usando Riendas para carreras de carneros cada un segundo. Gana 1 Fatiga de carnero cada segundo.<br>
+                - Carnero: galope: Aumenta la velocidad de movimiento en montura un 185%. Puedes mantener esta velocidad usando Riendas para carreras de carneros rápidamente. Gana 5 Fatiga de carnero cada segundo.<br><br>
+                Cuando tu carnero alcance 100 Fatiga de carnero no podrá ir más rápido y tendrá Carnero agotado durante 15 segundos.<br>
+                Puedes resetear las cargas de Fatiga de carnero pasando por los barriles de manzana que hay por el camino.<br>
+                Si mientras haces las misiones te desmontas del carnero, puedes pedirle otro a Pol Semperámbar.
+            </div>
+        </div>
+
+        <div class="mision">
+            <div class="titulo"><span class="alianza">[Alianza]</span> Historia de una ida y una vuelta</div>
+            <div class="npc">Empieza: <span>Neill Ramstein</span><br>Termina: <span>Neill Ramstein</span></div>
+            <div class="objetivo">Objetivo: Coge el barril de Flynn Aguardiente en Kharanos y entrégaselo a Pol Semperámbar. Si pierdes a tu carnero, pídele otro a Neill Ramstein.</div>
+            <div class="objeto">Objeto provisto: Riendas para carreras de carneros</div>
+            <div class="texto-jugador">El jugador debe ir montado en el carnero hasta acercarse a Flynn Aguardiente, en Kharanos.<br>Una vez que pase por el pueblo con el carnero, Flynn lanzará [Barril de Flynn Aguardiente] y debe llevarse hasta Pol Semperámbar.<br>El trayecto debe repetirse 3 veces ya que es posible llevar 1 barril a la vez.</div>
+            <div class="recompensa">Recompensa: Ficha para la Fiesta de la cerveza x10</div>
+        </div>
+
+        <div class="mision">
+            <div class="titulo"><span class="alianza">[Alianza]</span> Otro año, otro recuerdo</div>
+            <div class="npc">Empieza: <span>Pol Semperámbar</span><br>Termina: <span>Belbi Tiratrastos</span></div>
+            <div class="objetivo">Objetivo: Entrega el vale de jarra de la Fiesta de la Cerveza a Belbi Tiratrastos en el campamento de la Fiesta de la Cerveza.</div>
+            <div class="objeto">Objeto provisto: Vale de jarra de la Fiesta de la cerveza</div>
+            <div class="texto-jugador">El jugador debe hablar con Belbi Tiratrastos en Dun Morogh.</div>
+            <div class="recompensa">Recompensa: Jarra de la Fiesta de la cerveza verde</div>
+        </div>
+
+        <div class="mision">
+            <div class="titulo"><span class="alianza">[Alianza]</span> ¡Grita por los Cebadiz!</div>
+            <div class="npc">Empieza: <span>Becan Cebadiz</span><br>Termina: <span>Becan Cebadiz</span></div>
+            <div class="objetivo">Objetivo: Informa sobre la Fiesta de la Cerveza en las banderas fuera del banco, en la Sala Militar, en la Sala de los Expedicionarios y en la Sala Mística.</div>
+            <div class="objeto">Objeto provisto: Riendas para carreras de carneros</div>
+            <div class="texto-jugador">El jugador debe ir a la Ciudad Capital visitando las zonas designadas en un tiempo de 4 minutos, montado en el carnero:<br>- Afueras del Banco<br>- La Sala Militar<br>- Sala de los Expedicionarios<br>- La Sala Mística</div>
+            <div class="recompensa">Recompensa: Ficha para la Fiesta de la cerveza x15</div>
+        </div>
+
+        <div class="mision">
+            <div class="titulo"><span class="alianza">[Alianza]</span> ¡Grita por los Cebatruenos!</div>
+            <div class="npc">Empieza: <span>Daran Cebatruenos</span><br>Termina: <span>Daran Cebatruenos</span></div>
+            <div class="objetivo">Objetivo: Informa sobre la Fiesta de la Cerveza en las banderas fuera del banco, en la Sala Militar, en la Sala de los Expedicionarios y en la Sala Mística.</div>
+            <div class="objeto">Objeto provisto: Riendas para carreras de carneros</div>
+            <div class="texto-jugador">El jugador debe ir a la Ciudad Capital visitando las zonas designadas en un tiempo de 4 minutos, montado en el carnero:<br>- Afueras del Banco<br>- La Sala Militar<br>- Sala de los Expedicionarios<br>- La Sala Mística</div>
+            <div class="recompensa">Recompensa: Ficha para la Fiesta de la cerveza x15</div>
+        </div>
+
+        <div class="mision">
+            <div class="titulo"><span class="alianza">[Alianza]</span> La cerveza temible de Cerveza Temible</div>
+            <div class="npc">Empieza: <span>Cerveza temible de Cerveza Temible</span><br>Termina: <span>Ipfelkofer Barril de Hierro</span></div>
+            <div class="objetivo">Objetivo: Dale la cerveza temible de Cerveza Temible a Ipfelkofer Barril de Hierro en el campamento de la Fiesta de la Cerveza cerca de Forjaz.</div>
+            <div class="objeto">Objeto provisto: Cerveza temible de Cerveza Temible</div>
+            <div class="texto-jugador">El jugador debe entregarle la Cerveza temible de Cerveza Temible a Ipfelkofer Barril de Hierro en Dun Morogh.</div>
+            <div class="recompensa">Recompensa: Ficha para la Fiesta de la cerveza x40</div>
+        </div>
+
+        <div class="mision">
+            <div class="titulo">1) Busca a los saboteadores</div>
+            <div class="npc">Empieza: <span>Planes de sabotaje de los Hierro Negro</span><br>Termina: <span>Coren Cerveza Temible</span></div>
+            <div class="objetivo">Objetivo: Encuentra a Coren Cerveza Temible en Tragapenas, dentro de las Profundidades de Roca Negra.</div>
+            <div class="texto-jugador">El jugador debe hablar con Coren Cerveza Temible en Profundidades de Roca Negra.</div>
+            <div class="recompensa">Recompensa: Jarra de cerveza Hierro Negro x5</div>
+        </div>
+
+        <div class="mision">
+            <div class="titulo">2) <span class="alianza">[Alianza]</span> La mejor de las cervezas</div>
+            <div class="npc">Empieza: <span>Coren Cerveza Temible</span><br>Termina: <span>Ipfelkofer Barril de Hierro</span></div>
+            <div class="objetivo">Objetivo: Lleva el barril de cerveza Hierro Negro a Ipfelkofer Barril de Hierro en Dun Morogh.</div>
+            <div class="objeto">Objeto provisto: Barril de cerveza Hierro Negro</div>
+            <div class="texto-jugador">El jugador debe entregarle el Barril de cerveza Hierro Negro a Ipfelkofer Barril de Hierro en Dun Morogh.</div>
+            <div class="recompensa">Recompensa: Pichel Hierro Negro</div>
+        </div>
+
+        <div class="mision">
+            <div class="titulo"><span class="alianza">[Alianza]</span> Club de la Cerveza del Mes</div>
+            <div class="npc">Empieza: <span>Formulario de socio del Club de la "Cerveza del Mes"</span><br>Termina: <span>Larkin Cebatruenos</span></div>
+            <div class="objetivo">Objetivo: Llévale el formulario de socio del Club de la "Cerveza del Mes" a Larkin Cebatruenos en la Taberna Roca de Fuego en Forjaz.</div>
+            <div class="objeto">Objeto provisto: Formulario de socio del Club de la "Cerveza del Mes"</div>
+            <div class="texto-jugador">El jugador debe entregarle el Formulario de socio del Club de la "Cerveza del Mes" a Larkin Cebatruenos en Forjaz.<br>Al entregar la misión, el jugador recibirá una carta del Club de la cerveza.</div>
+        </div>
+    </div>
+
+    <!-- MISIONES HORDA -->
+    <div class="seccion">
+        <div class="seccion-titulo">Misiones de la Horda</div>
+        
+        <h4>Misiones introductorias (Sólo se puede tomar 1 de ambas)</h4>
+        <ul>
+            <li>[1] <span class="horda">[Horda]</span> ¡Fiesta de la Cerveza!</li>
+            <li>[1] <span class="horda">[Horda]</span> ¡Bienvenido a la Fiesta de la Cerveza!</li>
+        </ul>
+
+        <h4>Misiones sueltas</h4>
+        <ul>
+            <li>[1] <span class="horda">[Horda]</span> ¡Traga y tira!</li>
+        </ul>
+        <p>Desbloquea:</p>
+        <ul>
+            <li>[1][Diaria] <span class="horda">[Horda]</span> Ese día que estaba borracho...</li>
+            <li>[1] <span class="horda">[Horda]</span> ¡Atrapa al wolpertinger salvaje! (Esta misión no estuvo disponible para todos los reinos originalmente, por lo que no podrá tomarse)</li>
+            <li>[1] <span class="horda">[Horda]</span> Elekks rosas a la vista</li>
+            <li>[1] <span class="horda">[Horda]</span> Carrera de carneros... o algo parecido</li>
+        </ul>
+        <p>Desbloquea:</p>
+        <ul>
+            <li>[1] <span class="horda">[Horda]</span> Historia de una ida y una vuelta</li>
+            <li>[1] <span class="horda">[Horda]</span> Otro año, otro recuerdo</li>
+        </ul>
+
+        <p>De las siguientes diarias, sólo se puede escoger 1 por día:</p>
+        <ul>
+            <li>[1][Diaria] <span class="horda">[Horda]</span> ¡Grita por la destilería de Drohn!</li>
+            <li>[1][Diaria] <span class="horda">[Horda]</span> ¡Grita por la Cervecería vudú de T'chali!</li>
+            <li>[1] <span class="horda">[Horda]</span> La cerveza temible de Cerveza Temible</li>
+            <li>[48] Busca a los saboteadores</li>
+            <li>[1] <span class="horda">[Horda]</span> La mejor de las cervezas</li>
+            <li>[1] <span class="horda">[Horda]</span> Club de la Cerveza del Mes</li>
+        </ul>
+
+        <h4>Detalle de las misiones de la Horda</h4>
+
+        <div class="mision">
+            <div class="titulo"><span class="horda">[Horda]</span> ¡Fiesta de la Cerveza!</div>
+            <div class="npc">Empieza: <span>Plebeyo orco, Plebeyo trol, Plebeyo Renegado, Plebeyo elfo de sangre, Plebeyo tauren, Plebeyo goblin</span><br>Termina: <span>Espitador Barritimo</span></div>
+            <div class="objetivo">Objetivo: Habla con el organizador de la Fiesta de la Cerveza.</div>
+            <div class="texto-jugador">El jugador debe hablar con Espitador Barritimo en Durotar.</div>
+            <div class="recompensa">Recompensas a elegir: Grog de Gordok, Agua de río de la selva, Cerveza del Pasito</div>
+        </div>
+
+        <div class="mision">
+            <div class="titulo"><span class="horda">[Horda]</span> ¡Bienvenido a la Fiesta de la Cerveza!</div>
+            <div class="npc">Empieza: <span>Espitador Barritimo</span><br>Termina: <span>Espitador Barritimo</span></div>
+            <div class="texto-jugador">Esta misión no puede aceptarse por lo que el jugador sólo debe hablar con Espitador Barritimo en Durotar.</div>
+            <div class="recompensa">Recompensas a elegir: Grog de Gordok, Agua de río de la selva, Cerveza del Pasito</div>
+        </div>
+
+        <div class="mision">
+            <div class="titulo"><span class="horda">[Horda]</span> ¡Traga y tira!</div>
+            <div class="npc">Empieza: <span>Bizzle Birlotutti</span><br>Termina: <span>Bizzle Birlotutti</span></div>
+            <div class="objetivo">Objetivo: Utiliza la jarra de degustación sin alcohol de la Fiesta de la Cerveza para golpear a la G.U.A.O. 5 veces, y luego ve a hablar con Bizzle Birlotutti.</div>
+            <div class="texto-jugador">El jugador debe acercarse a las mesas aledañas a Bizzle y hacer clic en Jarra de degustación de la Fiesta de la cerveza de obsequio para crear Jarra de degustación de la Fiesta de la cerveza de obsequio.<br>La jarra debe usarse pare pegarle a Gran utilidad autogiratoria oscilante el cual estará caminando de lado a lado.</div>
+            <div class="recompensa">Recompensa: Ficha para la Fiesta de la cerveza x10</div>
+        </div>
+
+        <div class="mision">
+            <div class="titulo"><span class="horda">[Horda]</span> Ese día que estaba borracho...</div>
+            <div class="npc">Empieza: <span>Restos de la máquina topo Hierro Negro</span><br>Termina: <span>Bizzle Birlotutti</span></div>
+            <div class="objetivo">Objetivo: Habla con Bizzle Birlotutti en el campamento de la Fiesta de la Cerveza.</div>
+            <div class="texto-jugador">El jugador debe hablar con Bizzle Birlotutti en Durotar.</div>
+            <div class="recompensa">Recompensa: Ficha para la Fiesta de la cerveza x10<br><em>* Visita la sección 🍺 Ataque de los Hierro Negro para saber cómo interactuar con Restos de la máquina topo Hierro Negro</em></div>
+        </div>
+
+        <div class="mision">
+            <div class="titulo"><span class="horda">[Horda]</span> Elekks rosas a la vista</div>
+            <div class="npc">Empieza: <span>Glodrak Guasa</span><br>Termina: <span>Glodrak Guasa</span></div>
+            <div class="objetivo">Objetivo: Visita las terrazas a las afueras de Lunargenta, la Cima del Trueno y Entrañas, mata a tres elekks en cada uno de estos lugares y vuelve a ver a Glodrak Guasa. Tienes que llevar las gafas birratizadoras para ver elekks rosas.</div>
+            <div class="objeto">Objeto provisto: Rayo de dispersión de elekk</div>
+            <div class="texto-jugador">El jugador debe matar 3 Elekk rosa de Canción Eterna, 3 Elekk rosa de Mulgore y 3 Elekk rosa de Tirisfal con el Rayo de dispersión de elekk.<br>Para ver a los Elekks es necesario estar extremadamente borracho o tener equipado las Gafas birratizadoras, las cuales pueden conseguirse al hablar con Goldark Novatada.</div>
+            <div class="recompensa">Recompensa: Ficha para la Fiesta de la cerveza x40</div>
+        </div>
+
+        <div class="mision">
+            <div class="titulo"><span class="horda">[Horda]</span> Carrera de carneros... o algo parecido</div>
+            <div class="npc">Empieza: <span>Maestro de carneros Rayo</span><br>Termina: <span>Maestro de carneros Rayo</span></div>
+            <div class="objetivo">Objetivo: Tienes 4 minutos para montar el carnero y mantener 3 niveles de velocidad diferentes durante 8 segundos.</div>
+            <div class="objeto">Objeto provisto: Riendas para carreras de carneros</div>
+            <div class="texto-jugador">El jugador debe mantener 3 niveles de velocidad del carnero durante 8 segundos en cada nivel.</div>
+            <div class="texto-jugador">
+                <strong>¿Cómo usar el carnero?</strong><br>
+                Al empezar las misiones, serás montado en un carnero y recibirás Riendas para carreras de carneros el cual debe usarse para cambiar la velocidad a la que va el carnero:<br>
+                - Nivel de carnero: neutral: Velocidad de movimiento en montura reducida 50%. Pierde 4 Fatiga de carnero cada 2 segundos.<br>
+                - Carnero: trote: Aumenta la velocidad de movimiento en montura un 15%. Puedes mantener esta velocidad usando Riendas para carreras de carneros cada unos cuantos segundos. Pierde 2 Fatiga de carnero cada 2 segundos.<br>
+                - Carnero: medio galope: Aumenta la velocidad de movimiento en montura un 100%. Puedes mantener esta velocidad usando Riendas para carreras de carneros cada un segundo. Gana 1 Fatiga de carnero cada segundo.<br>
+                - Carnero: galope: Aumenta la velocidad de movimiento en montura un 185%. Puedes mantener esta velocidad usando Riendas para carreras de carneros rápidamente. Gana 5 Fatiga de carnero cada segundo.<br><br>
+                Cuando tu carnero alcance 100 Fatiga de carnero no podrá ir más rápido y tendrá Carnero agotado durante 15 segundos.<br>
+                Puedes resetear las cargas de Fatiga de carnero pasando por los barriles de manzana que hay por el camino.<br>
+                Si mientras haces las misiones te desmontas del carnero, puedes pedirle otro a Driz Pataplaf.
+            </div>
+        </div>
+
+        <div class="mision">
+            <div class="titulo"><span class="horda">[Horda]</span> Historia de una ida y una vuelta</div>
+            <div class="npc">Empieza: <span>Maestro de carneros Rayo</span><br>Termina: <span>Maestro de carneros Rayo</span></div>
+            <div class="objetivo">Objetivo: Coge el barril del goblin que se ha quedado tirado en el camino a la Bahía de Garrafilada y llévaselo al asistente del maestro de carneros Rayo. Si pierdes a tu carnero, pídele otro al maestro de carneros Rayo.</div>
+            <div class="objeto">Objeto provisto: Riendas para carreras de carneros</div>
+            <div class="texto-jugador">El jugador debe ir montado en el carnero hasta acercarse a Bok Caída Segura en Durotar.<br>Una vez que pase por el pueblo con el carnero, Bok lanzará [Barril de Bok Caída Segura] y debe llevarse hasta Driz Pataplaf.<br>El trayecto debe repetirse 3 veces ya que es posible llevar 1 barril a la vez.</div>
+            <div class="recompensa">Recompensa: Ficha para la Fiesta de la cerveza x10</div>
+        </div>
+
+        <div class="mision">
+            <div class="titulo"><span class="horda">[Horda]</span> Otro año, otro recuerdo</div>
+            <div class="npc">Empieza: <span>Blix Chirimbolo</span><br>Termina: <span>Blix Chirimbolo</span></div>
+            <div class="objetivo">Objetivo: Entrega el vale de jarra de la Fiesta de la Cerveza a Blix Chirimbolo en la parte trasera del campamento de la Fiesta de la Cerveza.</div>
+            <div class="objeto">Objeto provisto: Vale de jarra de la Fiesta de la cerveza</div>
+            <div class="texto-jugador">El jugador debe hablar con Blix Chirimbolo en Durotar.</div>
+            <div class="recompensa">Recompensa: Jarra de la Fiesta de la cerveza verde</div>
+        </div>
+
+        <div class="mision">
+            <div class="titulo"><span class="horda">[Horda]</span> ¡Grita por la destilería de Drohn!</div>
+            <div class="npc">Empieza: <span>Cort Gorestein</span><br>Termina: <span>Cort Gorestein</span></div>
+            <div class="objetivo">Objetivo: Informa sobre la Fiesta de la Cerveza en las banderas fuera de la casa de subastas, en el Valle de la Fuerza, el Valle del Honor, el Valle de la Sabiduría y el Valle de los Espíritus.</div>
+            <div class="objeto">Objeto provisto: Riendas para carreras de carneros</div>
+            <div class="texto-jugador">El jugador debe ir a la Ciudad Capital visitando las zonas designadas en un tiempo de 4 minutos, montado en el carnero:<br>- Afueras de la subasta<br>- Valle del Honor<br>- Valle de la Sabiduría<br>- Valle de los Espíritus</div>
+            <div class="recompensa">Recompensa: Ficha para la Fiesta de la cerveza x15</div>
+        </div>
+
+        <div class="mision">
+            <div class="titulo"><span class="horda">[Horda]</span> ¡Grita por la Cervecería vudú de T'chali!</div>
+            <div class="npc">Empieza: <span>Ja'ron</span><br>Termina: <span>Ja'ron</span></div>
+            <div class="objetivo">Objetivo: Informa sobre la Fiesta de la Cerveza en las banderas fuera de la casa de subastas, en el Valle de la Fuerza, el Valle del Honor, el Valle de la Sabiduría y el Valle de los Espíritus.</div>
+            <div class="objeto">Objeto provisto: Riendas para carreras de carneros</div>
+            <div class="texto-jugador">El jugador debe ir a la Ciudad Capital visitando las zonas designadas en un tiempo de 4 minutos, montado en el carnero:<br>- Afueras de la subasta<br>- Valle del Honor<br>- Valle de la Sabiduría<br>- Valle de los Espíritus</div>
+            <div class="recompensa">Recompensa: Ficha para la Fiesta de la cerveza x15</div>
+        </div>
+
+        <div class="mision">
+            <div class="titulo"><span class="horda">[Horda]</span> La cerveza temible de Cerveza Temible</div>
+            <div class="npc">Empieza: <span>Cerveza temible de Cerveza Temible</span><br>Termina: <span>Espitador Barritimo</span></div>
+            <div class="objetivo">Objetivo: Dale la cerveza temible de Cerveza Temible al espitador Barritimo en el campamento de la Fiesta de la Cerveza cerca de Orgrimmar.</div>
+            <div class="objeto">Objeto provisto: Cerveza temible de Cerveza Temible</div>
+            <div class="texto-jugador">El jugador debe entregarle la Cerveza temible de Cerveza Temible a Espitador Barritimo en Durotar.</div>
+            <div class="recompensa">Recompensa: Ficha para la Fiesta de la cerveza x40</div>
+        </div>
+
+        <div class="mision">
+            <div class="titulo">1) Busca a los saboteadores</div>
+            <div class="npc">Empieza: <span>Planes de sabotaje de los Hierro Negro</span><br>Termina: <span>Coren Cerveza Temible</span></div>
+            <div class="objetivo">Objetivo: Encuentra a Coren Cerveza Temible en Tragapenas, dentro de las Profundidades de Roca Negra.</div>
+            <div class="texto-jugador">El jugador debe hablar con Coren Cerveza Temible en Profundidades de Roca Negra.</div>
+            <div class="recompensa">Recompensa: Jarra de cerveza Hierro Negro x5</div>
+        </div>
+
+        <div class="mision">
+            <div class="titulo">2) <span class="horda">[Horda]</span> La mejor de las cervezas</div>
+            <div class="npc">Empieza: <span>Coren Cerveza Temible</span><br>Termina: <span>Espitador Barritimo</span></div>
+            <div class="objetivo">Objetivo: Lleva el barril de cerveza Hierro Negro a Espitador Barritimo en Durotar.</div>
+            <div class="objeto">Objeto provisto: Barril de cerveza Hierro Negro</div>
+            <div class="texto-jugador">El jugador debe entregarle el Barril de cerveza Hierro Negro a Espitador Barritimo en Durotar.</div>
+            <div class="recompensa">Recompensa: Pichel Hierro Negro</div>
+        </div>
+
+        <div class="mision">
+            <div class="titulo"><span class="horda">[Horda]</span> Club de la Cerveza del Mes</div>
+            <div class="npc">Empieza: <span>Formulario de socio del Club de la "Cerveza del Mes"</span><br>Termina: <span>Ray'ma</span></div>
+            <div class="objetivo">Objetivo: Llévale el formulario de socio del Club de la "Cerveza del Mes" a Ray'ma en Orgrimmar.</div>
+            <div class="objeto">Objeto provisto: Formulario de socio del Club de la "Cerveza del Mes"</div>
+            <div class="texto-jugador">El jugador debe entregarle el Formulario de socio del Club de la "Cerveza del Mes" a Ray'ma en Orgrimmar.<br>Al entregar la misión, el jugador recibirá una carta del Club de la cerveza.</div>
+        </div>
+    </div>
+
+    <!-- ATAQUE DE LOS HIERRO NEGRO -->
+    <div class="seccion">
+        <div class="seccion-titulo">Ataque de los Hierro Negro</div>
+        <p>Cada media hora, un grupo de Enanos Hierro Negro irrumpirá en la fiesta en los principales campamentos de la Fiesta de la Cerveza en las afueras de Forjaz y Orgrimmar.</p>
+        <p>La principal tarea es proteger los Barriles festivos (Los 3 barriles grandes alrededor del campamento) para que los enanos no puedan robar la cerveza gratis, durante 5 minutos.</p>
+        <p>Si no se logra, el evento finalizará prematuramente ya que los enanos habrán ganado.</p>
+        <p>Vencer a las olas de los Enanos Hierro Negro es un esfuerzo grupal, hay demasiados y la velocidad de bebida y lanzamiento es demasiado baja para que un solo personaje lo haga por sí mismo.</p>
+
+        <h4>🍺 Participación</h4>
+        <p>Golpear a estos enanos con una jarra de cerveza los dejará inconscientes, lo que los 'matará' y evitará que roben la cerveza gratis.</p>
+        <p>Cuando el ataque comience puedes participar de la siguiente manera:<br>
+        Toma una Jarra de degustación de la Fiesta de la cerveza de obsequio de las mesas cuadradas.<br>
+        Usa la jarra, lo que hará que el jugador la beba rápidamente y la arroje.<br>
+        Si se hace dentro de alcance de las camareras del evento, éstas lanzarán una jarra nueva al jugador. Beber las jarras también emborrachará al personaje.<br>
+        Si hay enanos hierro negro cerca, la jarra los golpeará y noqueará.<br>
+        La chance de éxito es aleatoria y no depende del nivel del personaje.</p>
+
+        <h4>🍺 Jarra de cerveza superior</h4>
+        <p>Con frecuencia, se colocarán grandes Jarra de cerveza superior en el suelo. Caminar a través de una de estas tazas le dará al jugador un beneficio de ataque de torbellino durante varios segundos.</p>
+        <p>Si obtienes el beneficio, apunta a grandes grupos de Enanos Hierro Negro para aturdirlos en masa. Ten en cuenta que esto solo los aturde, no los mata.</p>
+
+        <h4>🍺 Restos de la máquina topo Hierro Negro</h4>
+        <p>Los Restos de la máquina topo Hierro Negro solo aparecen si los Enanos Hierro Negro son derrotados.</p>
+        <p>Se ganará si queda al menos uno de los Barriles a salvo.</p>
+        <p>Este objeto ofrecerá la misión diaria <span class="alianza">[Alianza]</span> Ese día que estaba borracho... | <span class="horda">[Horda]</span> Ese día que estaba borracho....</p>
+    </div>
+
+    <!-- CLUB DE LA CERVEZA DEL MES -->
+    <div class="seccion">
+        <div class="seccion-titulo">Club de la cerveza del mes</div>
+        <p>Aquellos jugadores con el logro La cerveza del mes recibirán cada mes un correo con un tipo de cerveza diferente:</p>
+        <div style="overflow-x:auto;">
+            <table class="tabla-vendedor">
+                <thead>
+                    <tr>
+                        <th>Mes</th>
+                        <th>Bebida</th>
+                        <th>Efecto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Enero</td><td>Cerveza rubia Invierno Salvaje</td><td>Bestia interna</td></tr>
+                    <tr><td>Febrero</td><td>Sabor de amor de Izzard</td><td>Gases</td></tr>
+                    <tr><td>Marzo</td><td>Cerveza aromática de miel</td><td>Toque de miel</td></tr>
+                    <tr><td>Abril</td><td>Cerveza negra espumosa de Metok</td><td>Hinchado</td></tr>
+                    <tr><td>Mayo</td><td>Cerveza de primavera</td><td>Hippy</td></tr>
+                    <tr><td>Junio</td><td>Cerveza rubia de Roca Negra</td><td>Combustión interna</td></tr>
+                    <tr><td>Julio</td><td>Cerveza de Tuercespina</td><td>¡Locura en la jungla!</td></tr>
+                    <tr><td>Agosto</td><td>Cerveza rubia draénica</td><td>Invocar guardián de elekk rosa</td></tr>
+                    <tr><td>Septiembre</td><td>Cerveza binaria</td><td><span class="alianza">[Alianza]</span> 1000001 / <span class="horda">[Horda]</span> 1001000</td></tr>
+                    <tr><td>Octubre</td><td>Cerveza de bellota otoñal</td><td>Observado</td></tr>
+                    <tr><td>Noviembre</td><td>Cerveza amarga de Bartlett</td><td>Nauseabundo</td></tr>
+                    <tr><td>Diciembre</td><td>Etiqueta privada del Señor de la Escarcha</td><td>Enfriado</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <p>Si disfrutas alguna de las bebidas que has recibido, puedes comprar dicha bebida durante todo el mes a: Vendedor de cerveza.</p>
+    </div>
+
+    <!-- LOGROS -->
+    <div class="seccion">
+        <div class="seccion-titulo">Logros</div>
+        
+        <div class="logro">
+            <div class="logro-titulo">Una extraña cerveza</div>
+            <div class="logro-desc">Requisitos: Bebe las cervezas de la Fiesta de la cerveza listadas a continuación.</div>
+            <div class="logro-pasos">
+                <span class="alianza">[Alianza]</span> Alianza | <span class="horda">[Horda]</span> Horda<br>
+                Cebadiz ligera | Agua de río de la selva<br>
+                Batido proteico | Batido proteico<br>
+                Trueno 45 | Senda de la Cerveza<br>
+                Cebatruenos negra | Cabeza reducida fuerte<br>
+                Cebadiz oscura | Grog de Gordok<br>
+                Grog de Gordok | Cerveza del Largo Paseo<br>
+                Hidromiel ogro | Hidromiel ogro<br>
+                Cebatruenos rubia | Cerveza del Pasito<br>
+                Cebadiz clara | Magia cervecera<br><br>
+                Todas las bebidas listadas pueden comprarse en vendedores. Visitar cada enlace para conocer qué NPC las vende.
+            </div>
+        </div>
+
+        <div class="logro">
+            <div class="logro-titulo">¿Es persistente tu wolpertinger?</div>
+            <div class="logro-desc">Requisitos: Consigue una mascota wolpertinger.</div>
+            <div class="logro-pasos">1) Adquiere Pichel de wolpertinger de los vendedores del evento.</div>
+        </div>
+
+        <div class="logro">
+            <div class="logro-titulo">La dieta de la Fiesta de la cerveza</div>
+            <div class="logro-desc">Requisitos: Come 8 comidas de la Fiesta de la cerveza listadas a continuación.</div>
+            <div class="logro-pasos">
+                Salchichón<br>
+                Salchicha sabrosa<br>
+                Salchicha ahumada picante<br>
+                El pretzel, esencial en la Fiesta de la cerveza<br>
+                Salchicha en conserva<br>
+                Queso con cebolla<br>
+                Salchicha suculenta<br>
+                El Vínculo Dorado<br><br>
+                Todas las comidas listadas pueden comprarse en vendedores. Visitar cada enlace para conocer qué NPC las vende.
+            </div>
+        </div>
+
+        <div class="logro">
+            <div class="logro-titulo">La cerveza del mes</div>
+            <div class="logro-desc">Requisitos: Únete al Club de la Cerveza del Mes.</div>
+            <div class="logro-pasos">1) Completa la misión <span class="alianza">[Alianza]</span> Club de la Cerveza del Mes | <span class="horda">[Horda]</span> Club de la Cerveza del Mes.</div>
+        </div>
+
+        <div class="logro">
+            <div class="logro-titulo">La cerveza del año</div>
+            <div class="logro-desc">Requisitos: Degusta 12 cervezas del Club de la Cerveza del Mes.</div>
+            <div class="logro-pasos">
+                Cerveza rubia Invierno Salvaje<br>
+                Sabor de amor de Izzard<br>
+                Cerveza aromática de miel<br>
+                Cerveza negra espumosa de Metok<br>
+                Cerveza de primavera<br>
+                Cerveza rubia de Roca Negra<br>
+                Cerveza de Tuercespina<br>
+                Cerveza rubia draénica<br>
+                Cerveza binaria<br>
+                Cerveza de bellota otoñal<br>
+                Cerveza amarga de Bartlett<br>
+                Etiqueta privada del Señor de la Escarcha<br><br>
+                1) Debes haber obtenido el logro La cerveza del mes para recibir un tipo de cerveza cada mes. Este logro se completa en 1 año tras recibir todas las cervezas.
+            </div>
+        </div>
+
+        <div class="logro">
+            <div class="logro-titulo">Estupor</div>
+            <div class="logro-desc">Requisitos: Cae desde una altura de 65 metros sin morir estando bebido durante la celebración de la Fiesta de la Cerveza.</div>
+            <div class="logro-pasos">
+                1) Ponte completamente borracho.<br>
+                2) Salta de una altura de 65 metros o superior sin morir.
+            </div>
+        </div>
+
+        <div class="logro">
+            <div class="logro-titulo">Fiesta de la Cerveza Temible</div>
+            <div class="logro-desc">Requisitos: Mata a Coren Cerveza Temible.</div>
+            <div class="logro-pasos">1) Debes matar a Coren Cerveza Temible, en Profundidades de Roca Negra.</div>
+        </div>
+
+        <div class="logro">
+            <div class="logro-titulo">Abajo los Hierro Negro</div>
+            <div class="logro-desc">Requisitos: Defiende el campamento de la Fiesta de la Cerveza ante el ataque de los Hierro Negro y completa la misión Ese día, que estaba borracho…</div>
+            <div class="logro-pasos">
+                1) Defiende al campamento durante el ataque de los Hierro Negro (Véase la sección Ataque de los Hierro Negro).<br>
+                2) Completa la misión <span class="alianza">[Alianza]</span> Ese día que estaba borracho... | <span class="horda">[Horda]</span> Ese día que estaba borracho....
+            </div>
+        </div>
+
+        <div class="logro">
+            <div class="logro-titulo">Perturbar la paz</div>
+            <div class="logro-desc">Requisitos: Ponte 3 prendas de la Fiesta de la cerveza, acaba totalmente borracho y baila en Dalaran.</div>
+            <div class="logro-pasos">
+                1) Consigue 3 prendas de los vendedores del evento.<br>
+                2) Ponte completamente borracho.<br>
+                3) Usa /bailar en una zona de Dalaran que muestre en el mapa "Dalaran", no en subzonas.
+            </div>
+        </div>
+
+        <div class="logro">
+            <div class="logro-titulo">Viajará gracias al barril</div>
+            <div class="logro-desc">Requisitos: Consigue una montura de la Fiesta de la cerveza, o transforma la tuya en una usando lúpulo de la Fiesta de la cerveza.</div>
+            <div class="logro-pasos">
+                Opción A) Consigue de los vendedores cualquiera de las monturas del evento (Carnero de la Fiesta de la cerveza presto o Gran kodo de la Fiesta de la cerveza).<br>
+                Opción B) Usa en tu montura cualquiera de los Lúpulos disponibles de los vendedores del evento.
+            </div>
+        </div>
+
+        <div class="logro">
+            <div class="logro-titulo">Maestro cervecero</div>
+            <div class="logro-desc">Requisitos: Completa los logros de la Fiesta de la cerveza listados a continuación. Recibirás el título Maestro cervecero.</div>
+            <div class="logro-pasos">
+                ¿Es persistente tu wolpertinger?<br>
+                La dieta de la Fiesta de la cerveza<br>
+                La cerveza del mes<br>
+                Fiesta de la Cerveza Temible<br>
+                Abajo los Hierro Negro<br>
+                Viajará gracias al barril
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
